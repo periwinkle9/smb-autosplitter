@@ -11,7 +11,6 @@ state("fceux")
 	byte gameTimer100  : 0x3B1388, 0x7F8;
 	byte operMode      : 0x3B1388, 0x770;
 	byte operModeTask  : 0x3B1388, 0x772;
-	byte entranceCtrl  : 0x3B1388, 0x710;
 	
 	// SMB2J has a different address for the game timer
 	//byte gameTimer2J   : 0x3B1388, 0x7EC;
@@ -30,7 +29,6 @@ state("fceux")
 	byte gameTimer100  : 0x436B04, 0x7F8;
 	byte operMode      : 0x436B04, 0x770;
 	byte operModeTask  : 0x436B04, 0x772;
-	byte entranceCtrl  : 0x3B1388, 0x710;
 	
 	//byte gameTimer2J   : 0x436B04, 0x7EC;
 }*/
@@ -49,7 +47,6 @@ state("nestopia")
 	byte gameTimer100  : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x860;
 	byte operMode      : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x7D8;
 	byte operModeTask  : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x7DA;
-	byte entranceCtrl  : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x778;
 	
 	//byte gameTimer2J   : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x854;
 }
@@ -92,11 +89,14 @@ split
 	// Check for next level
 	if (current.worldNum > vars.currentWorld || current.levelNum > vars.currentLevel)
 	{
+		// I *think* this should technically work in all cases...?
+		bool levelStarted = (current.gameEngineSub == 7 || current.gameEngineSub == 8) &&
+			old.gameEngineSub < current.gameEngineSub;
+		
 		// Check split setting
 		if (settings["SplitLevelStart"]) // Split at next level start
 		{
-			if ((current.entranceCtrl == 7 && current.gameEngineSub == 7 && old.gameEngineSub == 0) ||
-				(current.gameEngineSub == 8 && old.gameEngineSub < 8))
+			if (levelStarted)
 			{
 				vars.updateProgress();
 				return true;
@@ -108,7 +108,8 @@ split
 			if (current.worldNum > vars.currentWorld + 1 ||
 				(current.worldNum == vars.currentWorld + 1 && vars.currentLevel < 3))
 			{
-				if (current.gameEngineSub == 8 && old.gameEngineSub < 8)
+				// Split at level start
+				if (levelStarted)
 				{
 					vars.updateProgress();
 					return true;
@@ -116,6 +117,7 @@ split
 			}
 			else
 			{
+				// Split (approximately) at black screen
 				if (current.screenTimer == 7 && old.screenTimer == 0)
 				{
 					vars.updateProgress();
