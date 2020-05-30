@@ -2,41 +2,28 @@
 
 state("fceux")
 {
-	//uint crc : "fceux.exe", 0x3F4CBC;
-	
 	byte screenTimer   : 0x3B1388, 0x7A0;
 	byte worldNum      : 0x3B1388, 0x75F;
 	byte levelNum      : 0x3B1388, 0x75C;
 	byte gameEngineSub : 0x3B1388, 0xE;
-	byte gameTimer100  : 0x3B1388, 0x7F8;
 	byte operMode      : 0x3B1388, 0x770;
 	byte operModeTask  : 0x3B1388, 0x772;
-	
-	// SMB2J has a different address for the game timer
-	//byte gameTimer2J   : 0x3B1388, 0x7EC;
 }
 
 // This one works too????
 // The base address is different from the one that I see most FCEUX autosplitters using??
 /*state("fceux")
 {
-	//uint crc : "fceux.exe", 0x3F4CBC;
-	
 	byte screenTimer   : 0x436B04, 0x7A0;
 	byte worldNum      : 0x436B04, 0x75F;
 	byte levelNum      : 0x436B04, 0x75C;
 	byte gameEngineSub : 0x436B04, 0xE;
-	byte gameTimer100  : 0x436B04, 0x7F8;
 	byte operMode      : 0x436B04, 0x770;
 	byte operModeTask  : 0x436B04, 0x772;
-	
-	//byte gameTimer2J   : 0x436B04, 0x7EC;
 }*/
 
 state("nestopia")
 {
-	//uint crc : 0x1AE0C8, 0x9C, 0x30, 0x38;
-	
 	// base 0x0000 address of ROM : "nestopia.exe", 0x1b2bcc, 0, 8, 0xc, 0xc, 0x68;
 	// just add your fceux offset to 0x68 to get the final nestopia offset
 	// ^ I didn't write this btw, but it's pretty useful info so I left it in :)
@@ -44,11 +31,8 @@ state("nestopia")
 	byte worldNum      : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x7C7;
 	byte levelNum      : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x7C4;
 	byte gameEngineSub : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x76;
-	byte gameTimer100  : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x860;
 	byte operMode      : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x7D8;
 	byte operModeTask  : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x7DA;
-	
-	//byte gameTimer2J   : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x854;
 }
 
 init
@@ -73,10 +57,10 @@ startup
 
 start
 {
-	// This is probably an overkill set of conditions, but it (probably?) doesn't hurt to be extra sure :)
-	if (current.worldNum == 0 && current.levelNum == 0 && current.gameTimer100 == 4 &&
-		current.gameEngineSub == 8 && old.gameEngineSub < 8 && current.operMode == 1 &&
-		current.operModeTask == 3)
+	// Hopefully this is a good enough set of conditions for most people
+	if (current.worldNum == 0 && current.levelNum == 0 &&
+		current.gameEngineSub == 8 && old.gameEngineSub < 8 &&
+		current.operMode == 1 && current.operModeTask >= 3)
 	{
 		// If you know where to go to see this message, you deserve a kosmicZ
 		print("Starting! GLHF kosmicZ /");
