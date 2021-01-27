@@ -1,6 +1,6 @@
 // SMB1 autosplitter by periwinkle
 
-state("fceux")
+state("fceux", "2.2.3")
 {
 	byte screenTimer   : 0x3B1388, 0x7A0;
 	byte worldNum      : 0x3B1388, 0x75F;
@@ -10,19 +10,17 @@ state("fceux")
 	byte operModeTask  : 0x3B1388, 0x772;
 }
 
-// This one works too????
-// The base address is different from the one that I see most FCEUX autosplitters using??
-/*state("fceux")
+state("fceux", "2.3.0")
 {
-	byte screenTimer   : 0x436B04, 0x7A0;
-	byte worldNum      : 0x436B04, 0x75F;
-	byte levelNum      : 0x436B04, 0x75C;
-	byte gameEngineSub : 0x436B04, 0xE;
-	byte operMode      : 0x436B04, 0x770;
-	byte operModeTask  : 0x436B04, 0x772;
-}*/
+	byte screenTimer   : 0x44962C, 0x7A0;
+	byte worldNum      : 0x44962C, 0x75F;
+	byte levelNum      : 0x44962C, 0x75C;
+	byte gameEngineSub : 0x44962C, 0xE;
+	byte operMode      : 0x44962C, 0x770;
+	byte operModeTask  : 0x44962C, 0x772;
+}
 
-state("nestopia")
+state("nestopia", "1.40")
 {
 	// base 0x0000 address of ROM : "nestopia.exe", 0x1b2bcc, 0, 8, 0xc, 0xc, 0x68;
 	// just add your fceux offset to 0x68 to get the final nestopia offset
@@ -35,17 +33,87 @@ state("nestopia")
 	byte operModeTask  : "nestopia.exe", 0x1B2BCC, 0, 8, 0xC, 0xC, 0x7DA;
 }
 
+state("nestopia", "1.50")
+{
+	// base 0x0000 address of ROM: "nestopia.exe", 0x1788EC, 0, 0x70
+	byte screenTimer   : "nestopia.exe", 0x1788EC, 0, 0x810;
+	byte worldNum      : "nestopia.exe", 0x1788EC, 0, 0x7CF;
+	byte levelNum      : "nestopia.exe", 0x1788EC, 0, 0x7CC;
+	byte gameEngineSub : "nestopia.exe", 0x1788EC, 0, 0x7E;
+	byte operMode      : "nestopia.exe", 0x1788EC, 0, 0x7E0;
+	byte operModeTask  : "nestopia.exe", 0x1788EC, 0, 0x7E2;
+}
+
 init
 {
+	// modules.First() sometimes points to ntdll.dll instead of the actual game's executable.
+	// An attempt has been made to work around that.
+	// Hopefully it works well enough...
+	int memSize = modules.First().ModuleMemorySize;
+	
+	if (game.ProcessName == "nestopia")
+	{
+		string prodVersion = modules.First().FileVersionInfo.ProductVersion;
+		if (modules.First().ModuleName != "nestopia.exe") // Workaround for modules.First() bug
+		{
+			print("THE BUG HAPPENED!!! kosmicMad\n(game.MainModule: " + game.MainModule.ModuleName + ")");
+			// The LiveSplit ASL documentation strongly recommends using modules.First()
+			// instead of game.MainModule.
+			// But, you know what, sometimes I don't have a choice. Sorry :(
+			memSize = game.MainModule.ModuleMemorySize;
+			prodVersion = game.MainModule.FileVersionInfo.ProductVersion;
+		}
+		if (memSize == 1953792) // Nestopia UE v1.50
+		{
+			print("Detected Nestopia UE v1.50");
+			version = "1.50";
+		}
+		else if (memSize == 2113536 && prodVersion == "1.40") // Nestopia v1.40
+		{
+			print("Detected Nestopia v1.40");
+			version = "1.40";
+		}
+		else
+		{
+			print("Unrecognized Nestopia version!");
+			version = "";
+		}
+	}
+	else if (game.ProcessName == "fceux")
+	{
+		if (modules.First().ModuleName != "fceux.exe") // Bug workaround
+		{
+			print("THE BUG HAPPENED!!! kosmicMad\n(game.MainModule: " + game.MainModule.ModuleName + ")");
+			memSize = game.MainModule.ModuleMemorySize;
+		}
+		
+		if (memSize == 4747264)
+		{
+			print("Detected FCEUX 2.2.3");
+			version = "2.2.3";
+		}
+		else if (memSize == 5877760)
+		{
+			print("Detected FCEUX 2.3.0");
+			version = "2.3.0";
+		}
+		else
+		{
+			print("Unrecognized FCEUX version!");
+			version = "";
+		}
+	}
+	
 	refreshRate = 60;
 	vars.currentWorld = 0;
 	vars.currentLevel = 0;
 	
-	Action update = () =>
+	Action<byte, byte> update = (world, level) =>
 		{
 			print(String.Format("Completed {0}-{1}", vars.currentWorld+1, vars.currentLevel+1));
-			vars.currentWorld = current.worldNum;
-			vars.currentLevel = current.levelNum;
+			print(String.Format("Now playing World {0}-{1}", world+1, level+1));
+			vars.currentWorld = world;
+			vars.currentLevel = level;
 		};
 	vars.updateProgress = update;
 }
@@ -82,7 +150,7 @@ split
 		{
 			if (levelStarted)
 			{
-				vars.updateProgress();
+				vars.updateProgress(current.worldNum, current.levelNum);
 				return true;
 			}
 		}
@@ -95,7 +163,7 @@ split
 				// Split at level start
 				if (levelStarted)
 				{
-					vars.updateProgress();
+					vars.updateProgress(current.worldNum, current.levelNum);
 					return true;
 				}
 			}
@@ -104,7 +172,7 @@ split
 				// Split (approximately) at black screen
 				if (current.screenTimer == 7 && old.screenTimer == 0)
 				{
-					vars.updateProgress();
+					vars.updateProgress(current.worldNum, current.levelNum);
 					return true;
 				}
 			}
@@ -123,6 +191,8 @@ split
 
 update
 {
+	if (version == "") return false;
+	
 	if (timer.CurrentPhase == TimerPhase.NotRunning)
 	{
 		vars.currentWorld = 0;

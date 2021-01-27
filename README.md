@@ -3,10 +3,11 @@ LiveSplit autosplitter for NES/FDS Super Mario Bros. (with partial support for F
 
 ## Supported Emulators
 Currently, the only supported emulators are:
-- FCEUX 2.2.3
-- Nestopia 1.40.
+- FCEUX, versions 2.2.3 and 2.3.0
+- Nestopia 1.40
+- Nestopia UE 1.50.
 
-Other versions of the above emulators may not work (Nestopia UE in particular is not currently supported).
+Other versions of the above emulators may not work.
 
 Mesen is not supported due to being banned for submission to the SRC leaderboards.
 
