@@ -47,8 +47,13 @@ state("nestopia", "1.50")
 init
 {
 	// modules.First() sometimes points to ntdll.dll instead of the actual game's executable.
-	// An attempt has been made to work around that.
-	// Hopefully it works well enough...
+	// Hopefully retrying the init function fixes that...?
+	if (modules.First().ModuleName != game.ProcessName + ".exe")
+	{
+		print("THE THING HAPPENED!!! kosmicMad (retrying init)");
+		throw new Exception("init - module not found");
+	}
+	
 	int memSize = modules.First().ModuleMemorySize;
 	
 	if (game.ProcessName == "nestopia")
@@ -56,15 +61,7 @@ init
 		// Extra check for the product version in the case of v1.40 because why not
 		// (Unfortunately, the product version in the v1.50 UE executable is just "x.xx").
 		string prodVersion = modules.First().FileVersionInfo.ProductVersion;
-		if (modules.First().ModuleName != "nestopia.exe") // Workaround for modules.First() bug
-		{
-			print("THE BUG HAPPENED!!! kosmicMad\n(game.MainModule: " + game.MainModule.ModuleName + ")");
-			// The LiveSplit ASL documentation strongly recommends using modules.First()
-			// instead of game.MainModule.
-			// But, you know what, sometimes I don't have a choice. Sorry :(
-			memSize = game.MainModule.ModuleMemorySize;
-			prodVersion = game.MainModule.FileVersionInfo.ProductVersion;
-		}
+		
 		if (memSize == 1953792) // Nestopia UE v1.50
 		{
 			print("Detected Nestopia UE v1.50");
@@ -83,12 +80,6 @@ init
 	}
 	else if (game.ProcessName == "fceux")
 	{
-		if (modules.First().ModuleName != "fceux.exe") // Bug workaround
-		{
-			print("THE BUG HAPPENED!!! kosmicMad\n(game.MainModule: " + game.MainModule.ModuleName + ")");
-			memSize = game.MainModule.ModuleMemorySize;
-		}
-		
 		if (memSize == 4747264)
 		{
 			print("Detected FCEUX 2.2.3");
