@@ -53,6 +53,8 @@ init
 	
 	if (game.ProcessName == "nestopia")
 	{
+		// Extra check for the product version in the case of v1.40 because why not
+		// (Unfortunately, the product version in the v1.50 UE executable is just "x.xx").
 		string prodVersion = modules.First().FileVersionInfo.ProductVersion;
 		if (modules.First().ModuleName != "nestopia.exe") // Workaround for modules.First() bug
 		{
@@ -138,6 +140,8 @@ start
 
 split
 {
+	bool shouldSplit = false;
+	
 	// Check for next level
 	if (current.worldNum > vars.currentWorld || current.levelNum > vars.currentLevel)
 	{
@@ -148,11 +152,7 @@ split
 		// Check split setting
 		if (settings["SplitLevelStart"]) // Split at next level start
 		{
-			if (levelStarted)
-			{
-				vars.updateProgress(current.worldNum, current.levelNum);
-				return true;
-			}
+			shouldSplit = levelStarted;
 		}
 		else // Split at black screen
 		{
@@ -161,20 +161,12 @@ split
 				(current.worldNum == vars.currentWorld + 1 && vars.currentLevel < 3))
 			{
 				// Split at level start
-				if (levelStarted)
-				{
-					vars.updateProgress(current.worldNum, current.levelNum);
-					return true;
-				}
+				shouldSplit = levelStarted;
 			}
 			else
 			{
 				// Split (approximately) at black screen
-				if (current.screenTimer == 7 && old.screenTimer == 0)
-				{
-					vars.updateProgress(current.worldNum, current.levelNum);
-					return true;
-				}
+				shouldSplit = (current.screenTimer == 7 && old.screenTimer == 0);
 			}
 		}
 	}
@@ -187,6 +179,11 @@ split
 			return true;
 		}
 	}
+	
+	if (shouldSplit)
+		vars.updateProgress(current.worldNum, current.levelNum);
+	
+	return shouldSplit;
 }
 
 update
