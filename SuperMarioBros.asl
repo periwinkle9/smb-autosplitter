@@ -20,6 +20,26 @@ state("fceux", "2.3.0")
 	byte operModeTask  : 0x44962C, 0x772;
 }
 
+state("fceux", "2.4.0")
+{
+	byte screenTimer   : 0x44DCD8, 0x7A0;
+	byte worldNum      : 0x44DCD8, 0x75F;
+	byte levelNum      : 0x44DCD8, 0x75C;
+	byte gameEngineSub : 0x44DCD8, 0xE;
+	byte operMode      : 0x44DCD8, 0x770;
+	byte operModeTask  : 0x44DCD8, 0x772;
+}
+
+state("fceux", "2.5.0")
+{
+	byte screenTimer   : 0x3DA4EC, 0x7A0;
+	byte worldNum      : 0x3DA4EC, 0x75F;
+	byte levelNum      : 0x3DA4EC, 0x75C;
+	byte gameEngineSub : 0x3DA4EC, 0xE;
+	byte operMode      : 0x3DA4EC, 0x770;
+	byte operModeTask  : 0x3DA4EC, 0x772;
+}
+
 state("nestopia", "1.40")
 {
 	// base 0x0000 address of ROM : "nestopia.exe", 0x1b2bcc, 0, 8, 0xc, 0xc, 0x68;
@@ -44,6 +64,28 @@ state("nestopia", "1.50")
 	byte operModeTask  : "nestopia.exe", 0x1788EC, 0, 0x7E2;
 }
 
+state("nestopia", "1.51")
+{
+	// base 0x0000 address of ROM: "nestopia.exe", 0x1798EC, 0, 0x70
+	byte screenTimer   : "nestopia.exe", 0x1798EC, 0, 0x810;
+	byte worldNum      : "nestopia.exe", 0x1798EC, 0, 0x7CF;
+	byte levelNum      : "nestopia.exe", 0x1798EC, 0, 0x7CC;
+	byte gameEngineSub : "nestopia.exe", 0x1798EC, 0, 0x7E;
+	byte operMode      : "nestopia.exe", 0x1798EC, 0, 0x7E0;
+	byte operModeTask  : "nestopia.exe", 0x1798EC, 0, 0x7E2;
+}
+
+state("nestopia", "1.51.1")
+{
+	// base 0x0000 address of ROM: "nestopia.exe", 0x17A8EC, 0, 0x70
+	byte screenTimer   : "nestopia.exe", 0x17A8EC, 0, 0x810;
+	byte worldNum      : "nestopia.exe", 0x17A8EC, 0, 0x7CF;
+	byte levelNum      : "nestopia.exe", 0x17A8EC, 0, 0x7CC;
+	byte gameEngineSub : "nestopia.exe", 0x17A8EC, 0, 0x7E;
+	byte operMode      : "nestopia.exe", 0x17A8EC, 0, 0x7E0;
+	byte operModeTask  : "nestopia.exe", 0x17A8EC, 0, 0x7E2;
+}
+
 init
 {
 	// modules.First() sometimes points to ntdll.dll instead of the actual game's executable.
@@ -62,38 +104,58 @@ init
 		// (Unfortunately, the product version in the v1.50 UE executable is just "x.xx").
 		string prodVersion = modules.First().FileVersionInfo.ProductVersion;
 		
-		if (memSize == 1953792) // Nestopia UE v1.50
+		switch (memSize)
 		{
-			print("Detected Nestopia UE v1.50");
-			version = "1.50";
-		}
-		else if (memSize == 2113536 && prodVersion == "1.40") // Nestopia v1.40
-		{
-			print("Detected Nestopia v1.40");
-			version = "1.40";
-		}
-		else
-		{
-			print("Unrecognized Nestopia version!");
-			version = "";
+			case 2113536: // Nestopia v1.40
+				if (prodVersion == "1.40")
+				{
+					print("Detected Nestopia v1.40");
+					version = "1.40";
+					break;
+				}
+				goto default;
+			case 1953792: // Nestopia UE v1.50
+				print("Detected Nestopia UE v1.50");
+				version = "1.50";
+				break;
+			case 1966080: // Nestopia UE v1.51.0
+				print("Detected Nestopia UE v1.51.0");
+				version = "1.51";
+				break;
+			case 1970176: // Nestopia UE v1.51.1
+				print("Detected Nestopia UE v1.51.1");
+				version = "1.51.1";
+				break;
+			default:
+				print("Unrecognized Nestopia version! (ModuleMemorySize = " + memSize + ")");
+				version = "";
+				break;
 		}
 	}
 	else if (game.ProcessName == "fceux")
 	{
-		if (memSize == 4747264)
+		switch (memSize)
 		{
-			print("Detected FCEUX 2.2.3");
-			version = "2.2.3";
-		}
-		else if (memSize == 5877760)
-		{
-			print("Detected FCEUX 2.3.0");
-			version = "2.3.0";
-		}
-		else
-		{
-			print("Unrecognized FCEUX version!");
-			version = "";
+			case 4747264:
+				print("Detected FCEUX 2.2.3");
+				version = "2.2.3";
+				break;
+			case 5877760:
+				print("Detected FCEUX 2.3.0");
+				version = "2.3.0";
+				break;
+			case 6705152:
+				print("Detected FCEUX 2.4.0");
+				version = "2.4.0";
+				break;
+			case 6303744:
+				print("Detected FCEUX 2.5.0");
+				version = "2.5.0";
+				break;
+			default:
+				print("Unrecognized FCEUX version! (ModuleMemorySize = " + memSize + ")");
+				version = "";
+				break;
 		}
 	}
 	

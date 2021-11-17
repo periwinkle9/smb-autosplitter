@@ -2,16 +2,23 @@
 LiveSplit autosplitter for NES/FDS Super Mario Bros. (with partial support for FDS Super Mario Bros. 2, a.k.a. "SMB2J").
 
 ## Supported Emulators
-Currently, the only supported emulators are:
-- FCEUX, versions 2.2.3 and 2.3.0
+Currently, the following emulators are supported:
+- FCEUX (Win32 binaries, i.e. not the Qt/SDL ones), versions:
+  * 2.2.3
+  * 2.3.0
+  * 2.4.0
+  * 2.5.0
 - Nestopia 1.40
-- Nestopia UE 1.50.
+- Nestopia UE, versions:
+  * 1.50
+  * 1.51.0
+  * 1.51.1.
 
-Other versions of the above emulators may not work.
+Other versions of the above emulators probably will not work.
 
 Mesen is not supported due to being banned for submission to the SRC leaderboards.
 
-Bizhawk support is currently under investigation (contact me or submit a pull request if you know the memory addresses for Bizhawk!).
+Bizhawk is currently not supported—contact me or submit a pull request if you know the memory addresses for Bizhawk!
 
 ## Supported Speedrun Categories
 The autosplitter *should* fully work in most categories that start in 1-1 and end by touching an axe in a world numbered 8 or higher.
@@ -39,6 +46,7 @@ Other categories will not be properly supported:
 - Category extensions that don't complete the game, such as 1-1 as Fire Mario, Softlock, 10 Walljumps, etc.
 
 ## Usage Instructions
+0. Make sure you do not have any autosplitters activated under the "Edit Splits" window (they may conflict with this one).
 1. Download the "SuperMarioBros.asl" file and place it somewhere safe on your computer.
 2. Right-click LiveSplit, choose "Edit Layout...", and add a "Scriptable Auto Splitter" component (under "Control").
 3. Go to Layout Settings, click on the "Scriptable Auto Splitter" tab, click "Browse..." and select the file that you saved in Step 1.
