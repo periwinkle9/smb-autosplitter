@@ -3,17 +3,17 @@ LiveSplit autosplitter for NES/FDS Super Mario Bros. (with partial support for F
 
 ## Supported Emulators
 Currently, the following emulators are supported:
-- FCEUX (Win32 binaries, i.e. not the Qt/SDL ones), versions:
-  * 2.2.3
-  * 2.3.0
-  * 2.4.0
-  * 2.5.0
-- Nestopia 1.40
-- Nestopia UE, versions:
-  * 1.50
-  * 1.51.0
-  * 1.51.1
-- Mesen (threecreepio's RTA fork, version 0.0.4).
+- [FCEUX](https://fceux.com/web/home.html) (Win32 binaries, i.e. not the Qt/SDL ones), versions:
+  * [2.2.3](https://sourceforge.net/projects/fceultra/files/Binaries/2.2.3/fceux-2.2.3-win32.zip/download)
+  * [2.3.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.3.0/fceux-2.3.0-win32.zip/download)
+  * [2.4.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.4.0/fceux-2.4.0-win32.zip/download)
+  * [2.5.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.5.0/fceux-2.5.0-win32.zip/download)
+- [Nestopia](http://nestopia.sourceforge.net/), version [1.40](http://prdownloads.sourceforge.net/nestopia/Nestopia140bin.zip?download)
+- [Nestopia UE](http://0ldsk00l.ca/nestopia/), versions:
+  * [1.50](https://sourceforge.net/projects/nestopiaue/files/1.50/nestopia_1.50-win32.zip/download)
+  * [1.51.0](https://sourceforge.net/projects/nestopiaue/files/1.51/nestopia_1.51.0-win32.zip/download)
+  * [1.51.1](https://sourceforge.net/projects/nestopiaue/files/1.51/nestopia_1.51.1-win32.zip/download)
+- [Mesen](https://github.com/threecreepio/mesenrta) (threecreepio's RTA fork), version [0.0.4](https://github.com/threecreepio/mesenrta/releases/tag/0.0.4).
 
 Other versions of the above emulators probably will not work.
 
