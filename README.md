@@ -12,11 +12,10 @@ Currently, the following emulators are supported:
 - Nestopia UE, versions:
   * 1.50
   * 1.51.0
-  * 1.51.1.
+  * 1.51.1
+- Mesen (threecreepio's RTA fork, version 0.0.4).
 
 Other versions of the above emulators probably will not work.
-
-Mesen is not supported due to being banned for submission to the SRC leaderboards.
 
 Bizhawk is currently not supported—contact me or submit a pull request if you know the memory addresses for Bizhawk!
 

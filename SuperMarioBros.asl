@@ -86,6 +86,17 @@ state("nestopia", "1.51.1")
 	byte operModeTask  : "nestopia.exe", 0x17A8EC, 0, 0x7E2;
 }
 
+state("Mesen", "0.0.4")
+{
+	// base 0x0000 address of ROM: "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0
+	byte screenTimer   : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x7A0;
+	byte worldNum      : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x75F;
+	byte levelNum      : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x75C;
+	byte gameEngineSub : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0xE;
+	byte operMode      : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x770;
+	byte operModeTask  : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x772;
+}
+
 init
 {
 	// modules.First() sometimes points to ntdll.dll instead of the actual game's executable.
@@ -157,6 +168,16 @@ init
 				version = "";
 				break;
 		}
+	}
+	else if (game.ProcessName == "Mesen")
+	{
+		if (memSize != 5226496)
+		{
+			print("Unrecognized Mesen version! (ModuleMemorySize = " + memSize + ")");
+			version = "";
+		}
+		else
+			version = "0.0.4";
 	}
 	
 	refreshRate = 60;
