@@ -97,6 +97,28 @@ state("Mesen", "0.0.4")
 	byte operModeTask  : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x772;
 }
 
+state("Mesen", "0.0.5")
+{
+	// base 0x0000 address of ROM: "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0
+	byte screenTimer   : "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0x7A0;
+	byte worldNum      : "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0x75F;
+	byte levelNum      : "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0x75C;
+	byte gameEngineSub : "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0xE;
+	byte operMode      : "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0x770;
+	byte operModeTask  : "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0x772;
+}
+
+state("Mesen", "0.0.6")
+{
+	// base 0x0000 address of ROM: "MesenCore.dll", 0x42FA9C0, 0xB8, 0x58, 0
+	byte screenTimer   : "MesenCore.dll", 0x42FA9C0, 0xB8, 0x58, 0x7A0;
+	byte worldNum      : "MesenCore.dll", 0x42FA9C0, 0xB8, 0x58, 0x75F;
+	byte levelNum      : "MesenCore.dll", 0x42FA9C0, 0xB8, 0x58, 0x75C;
+	byte gameEngineSub : "MesenCore.dll", 0x42FA9C0, 0xB8, 0x58, 0xE;
+	byte operMode      : "MesenCore.dll", 0x42FA9C0, 0xB8, 0x58, 0x770;
+	byte operModeTask  : "MesenCore.dll", 0x42FA9C0, 0xB8, 0x58, 0x772;
+}
+
 init
 {
 	// modules.First() sometimes points to ntdll.dll instead of the actual game's executable.
@@ -171,13 +193,25 @@ init
 	}
 	else if (game.ProcessName == "Mesen")
 	{
-		if (memSize != 5226496)
+		switch (memSize)
 		{
-			print("Unrecognized Mesen version! (ModuleMemorySize = " + memSize + ")");
-			version = "";
+			case 5226496:
+				print("Detected Mesen 0.0.4");
+				version = "0.0.4";
+				break;
+			case 5300224:
+				print("Detected Mesen 0.0.5");
+				version = "0.0.5";
+				break;
+			case 5283840:
+				print("Detected Mesen 0.0.6");
+				version = "0.0.6";
+				break;
+			default:
+				print("Unrecognized Mesen version! (ModuleMemorySize = " + memSize + ")");
+				version = "";
+				break;
 		}
-		else
-			version = "0.0.4";
 	}
 	
 	refreshRate = 60;
