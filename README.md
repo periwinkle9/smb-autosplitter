@@ -3,11 +3,14 @@ LiveSplit autosplitter for NES/FDS Super Mario Bros. (with partial support for F
 
 ## Supported Emulators
 Currently, the following emulators are supported:
-- [FCEUX](https://fceux.com/web/home.html) (Win32 binaries, i.e. not the Qt/SDL ones), versions:
+- [FCEUX](https://fceux.com/web/home.html) (Win32 binaries), versions:
   * [2.2.3](https://sourceforge.net/projects/fceultra/files/Binaries/2.2.3/fceux-2.2.3-win32.zip/download)
   * [2.3.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.3.0/fceux-2.3.0-win32.zip/download)
   * [2.4.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.4.0/fceux-2.4.0-win32.zip/download)
   * [2.5.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.5.0/fceux-2.5.0-win32.zip/download)
+  * [2.6.1](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.1/fceux-2.6.1-win32.zip/download)
+- FCEUX (Qt/SDL binaries), version:
+  * [2.6.1](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.1/qfceux-2.6.1-win64.zip/download)
 - [Nestopia](http://nestopia.sourceforge.net/), version [1.40](http://prdownloads.sourceforge.net/nestopia/Nestopia140bin.zip?download)
 - [Nestopia UE](http://0ldsk00l.ca/nestopia/), versions:
   * [1.50](https://sourceforge.net/projects/nestopiaue/files/1.50/nestopia_1.50-win32.zip/download)

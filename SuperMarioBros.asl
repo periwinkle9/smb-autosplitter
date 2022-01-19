@@ -40,6 +40,26 @@ state("fceux", "2.5.0")
 	byte operModeTask  : 0x3DA4EC, 0x772;
 }
 
+state("fceux", "2.6.1")
+{
+	byte screenTimer   : 0x3DA4DC, 0x7A0;
+	byte worldNum      : 0x3DA4DC, 0x75F;
+	byte levelNum      : 0x3DA4DC, 0x75C;
+	byte gameEngineSub : 0x3DA4DC, 0xE;
+	byte operMode      : 0x3DA4DC, 0x770;
+	byte operModeTask  : 0x3DA4DC, 0x772;
+}
+
+state("qfceux", "2.6.1")
+{
+	byte screenTimer   : 0x30DD70, 0x7A0;
+	byte worldNum      : 0x30DD70, 0x75F;
+	byte levelNum      : 0x30DD70, 0x75C;
+	byte gameEngineSub : 0x30DD70, 0xE;
+	byte operMode      : 0x30DD70, 0x770;
+	byte operModeTask  : 0x30DD70, 0x772;
+}
+
 state("nestopia", "1.40")
 {
 	// base 0x0000 address of ROM : "nestopia.exe", 0x1b2bcc, 0, 8, 0xc, 0xc, 0x68;
@@ -182,13 +202,50 @@ init
 				version = "2.4.0";
 				break;
 			case 6303744:
-				print("Detected FCEUX 2.5.0");
-				version = "2.5.0";
+			{
+				// Unfortunately for us, FCEUX 2.5.0 and 2.6.1 have the same ModuleMemorySize
+				// So we need a better way to distinguish between the two
+				byte[] md5;
+				using (var m = System.Security.Cryptography.MD5.Create())
+				{
+					using (var s = File.Open(modules.First().FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+						md5 = m.ComputeHash(s);
+				}
+				var md5hash = md5.Select(x => x.ToString("X2")).Aggregate((a,b) => a+b);
+				print("MD5: " + md5hash);
+				
+				if (md5hash == "556D42AD2F4E3C162771EB8DC8CDACBE")
+				{
+					print("Detected FCEUX 2.5.0");
+					version = "2.5.0";
+				}
+				else if (md5hash == "58843619D5B9D51FEC640AEB3EEABA6E")
+				{
+					print("Detected FCEUX 2.6.1");
+					version = "2.6.1";
+				}
+				else
+					goto default;
+				
 				break;
+			}
 			default:
 				print("Unrecognized FCEUX version! (ModuleMemorySize = " + memSize + ")");
 				version = "";
 				break;
+		}
+	}
+	else if (game.ProcessName == "qfceux")
+	{
+		if (memSize == 16080896)
+		{
+			print("Detected FCEUX (Qt/SDL) 2.6.1");
+			version = "2.6.1";
+		}
+		else
+		{
+			print("Unrecognized qFCEUX version! (ModuleMemorySize = " + memSize + ")");
+			version = "";
 		}
 	}
 	else if (game.ProcessName == "Mesen")
