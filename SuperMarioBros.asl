@@ -205,21 +205,21 @@ init
 			{
 				// Unfortunately for us, FCEUX 2.5.0 and 2.6.1 have the same ModuleMemorySize
 				// So we need a better way to distinguish between the two
-				byte[] md5;
-				using (var m = System.Security.Cryptography.MD5.Create())
+				byte[] hash;
+				using (var m = System.Security.Cryptography.SHA1.Create())
 				{
 					using (var s = File.Open(modules.First().FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-						md5 = m.ComputeHash(s);
+						hash = m.ComputeHash(s);
 				}
-				var md5hash = md5.Select(x => x.ToString("X2")).Aggregate((a,b) => a+b);
-				print("MD5: " + md5hash);
+				var hashStr = hash.Select(x => x.ToString("X2")).Aggregate((a,b) => a+b);
+				print("SHA1 hash: " + hashStr);
 				
-				if (md5hash == "556D42AD2F4E3C162771EB8DC8CDACBE")
+				if (hashStr == "6E5D8D8164C6987B6C82890DEAF08505823AAB43")
 				{
 					print("Detected FCEUX 2.5.0");
 					version = "2.5.0";
 				}
-				else if (md5hash == "58843619D5B9D51FEC640AEB3EEABA6E")
+				else if (hashStr == "00D71187B3653DC2B30593D8C9024C4F3C1AF58D")
 				{
 					print("Detected FCEUX 2.6.1");
 					version = "2.6.1";
