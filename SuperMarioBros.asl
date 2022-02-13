@@ -40,7 +40,8 @@ state("fceux", "2.5.0")
 	byte operModeTask  : 0x3DA4EC, 0x772;
 }
 
-state("fceux", "2.6.1")
+// FCEUX 2.6.1 and 2.6.2 have the same base RAM address
+state("fceux", "2.6.1/2")
 {
 	byte screenTimer   : 0x3DA4DC, 0x7A0;
 	byte worldNum      : 0x3DA4DC, 0x75F;
@@ -58,6 +59,16 @@ state("qfceux", "2.6.1")
 	byte gameEngineSub : 0x30DD70, 0xE;
 	byte operMode      : 0x30DD70, 0x770;
 	byte operModeTask  : 0x30DD70, 0x772;
+}
+
+state("qfceux", "2.6.2")
+{
+	byte screenTimer   : 0x30ED70, 0x7A0;
+	byte worldNum      : 0x30ED70, 0x75F;
+	byte levelNum      : 0x30ED70, 0x75C;
+	byte gameEngineSub : 0x30ED70, 0xE;
+	byte operMode      : 0x30ED70, 0x770;
+	byte operModeTask  : 0x30ED70, 0x772;
 }
 
 state("nestopia", "1.40")
@@ -203,8 +214,8 @@ init
 				break;
 			case 6303744:
 			{
-				// Unfortunately for us, FCEUX 2.5.0 and 2.6.1 have the same ModuleMemorySize
-				// So we need a better way to distinguish between the two
+				// Unfortunately for us, FCEUX 2.5.0, 2.6.1, and 2.6.2 have the same ModuleMemorySize
+				// So we need a better way to distinguish between them
 				byte[] hash;
 				using (var m = System.Security.Cryptography.SHA1.Create())
 				{
@@ -222,7 +233,12 @@ init
 				else if (hashStr == "00D71187B3653DC2B30593D8C9024C4F3C1AF58D")
 				{
 					print("Detected FCEUX 2.6.1");
-					version = "2.6.1";
+					version = "2.6.1/2";
+				}
+				else if (hashStr == "4E99DBAA10F1634CF470A8200835925B265D9BEF")
+				{
+					print("Detected FCEUX 2.6.2");
+					version = "2.6.1/2";
 				}
 				else
 					goto default;
@@ -241,6 +257,11 @@ init
 		{
 			print("Detected FCEUX (Qt/SDL) 2.6.1");
 			version = "2.6.1";
+		}
+		else if (memSize == 16084992)
+		{
+			print("Detected FCEUX (Qt/SDL) 2.6.2");
+			version = "2.6.2";
 		}
 		else
 		{
