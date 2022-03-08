@@ -54,7 +54,7 @@ Other categories will not be properly supported:
 
 ## Usage Instructions
 0. Make sure you do not have any autosplitters activated under the "Edit Splits" window (they may conflict with this one).
-1. Download the "SuperMarioBros.asl" file and place it somewhere safe on your computer.
+1. Download the "[SuperMarioBros.asl](https://github.com/periwinkle9/smb-autosplitter/raw/master/SuperMarioBros.asl)" file and place it somewhere safe on your computer.
 2. Right-click LiveSplit, choose "Edit Layout...", and add a "Scriptable Auto Splitter" component (under "Control").
 3. Go to Layout Settings, click on the "Scriptable Auto Splitter" tab, click "Browse..." and select the file that you saved in Step 1.
 
@@ -63,7 +63,7 @@ You will still have to set up split names, other layout settings, etc. yourself.
 
 ## Known Issues
 
-- Title screen delays (i.e. starting the timer on reset/game select) is currently not supported. Start the timer manually if you are using a start delay.
+- Title screen delays (i.e. starting the timer on reset/game select) are currently not supported. Start the timer manually if you are using a start delay.
 - The autosplitter does not split perfectly (expect a variance of up to ~3 frames or so). As such, LiveSplit's sum of best calculation will be inaccurate even if all of your splits were done by this autosplitter. This one is on LiveSplit, not on me.
 - If the timer is not running, the autosplitter will start it when entering or exiting a sub-area in 1-1.
 - Both Quests: Splitting during second quest is currently not supported.
