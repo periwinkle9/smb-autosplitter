@@ -30,7 +30,8 @@ state("fceux", "2.4.0")
 	byte operModeTask  : 0x44DCD8, 0x772;
 }
 
-state("fceux", "2.5.0")
+// FCEUX 2.5.0 and 2.6.3 have the same base RAM address
+state("fceux", "2.5.0/2.6.3")
 {
 	byte screenTimer   : 0x3DA4EC, 0x7A0;
 	byte worldNum      : 0x3DA4EC, 0x75F;
@@ -69,6 +70,16 @@ state("qfceux", "2.6.2")
 	byte gameEngineSub : 0x30ED70, 0xE;
 	byte operMode      : 0x30ED70, 0x770;
 	byte operModeTask  : 0x30ED70, 0x772;
+}
+
+state("qfceux", "2.6.3")
+{
+	byte screenTimer   : 0x318330, 0x7A0;
+	byte worldNum      : 0x318330, 0x75F;
+	byte levelNum      : 0x318330, 0x75C;
+	byte gameEngineSub : 0x318330, 0xE;
+	byte operMode      : 0x318330, 0x770;
+	byte operModeTask  : 0x318330, 0x772;
 }
 
 state("nestopia", "1.40")
@@ -225,10 +236,10 @@ init
 				var hashStr = hash.Select(x => x.ToString("X2")).Aggregate((a,b) => a+b);
 				print("SHA1 hash: " + hashStr);
 				
-				if (hashStr == "6E5D8D8164C6987B6C82890DEAF08505823AAB43")
+				if (hashStr == "6E5D8D8164C6987B6C82890DEAF08505823AAB43" || hashStr == "761457488E3E0BAC68A9A9164DFFCA2E5D25B6EC")
 				{
-					print("Detected FCEUX 2.5.0");
-					version = "2.5.0";
+					print("Detected FCEUX 2.5.0/2.6.3");
+					version = "2.5.0/2.6.3";
 				}
 				else if (hashStr == "00D71187B3653DC2B30593D8C9024C4F3C1AF58D")
 				{
@@ -262,6 +273,11 @@ init
 		{
 			print("Detected FCEUX (Qt/SDL) 2.6.2");
 			version = "2.6.2";
+		}
+		else if (memSize == 16121856)
+		{
+			print("Detected FCEUX (Qt/SDL) 2.6.3");
+			version = "2.6.3";
 		}
 		else
 		{
