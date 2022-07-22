@@ -11,10 +11,12 @@ Currently, the following emulators are supported:
   * [2.6.1](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.1/fceux-2.6.1-win32.zip/download)
   * [2.6.2](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.2/fceux-2.6.2-win32.zip/download)
   * [2.6.3](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.3/fceux-2.6.3-win32.zip/download)
+  * [2.6.4](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.4/fceux-2.6.4-win32.zip/download)
 - FCEUX (Qt/SDL binaries), versions:
   * [2.6.1](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.1/qfceux-2.6.1-win64.zip/download)
   * [2.6.2](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.2/qfceux-2.6.2-win64.zip/download)
   * [2.6.3](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.3/qfceux-2.6.3-win64.zip/download)
+  * [2.6.4](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.4/qfceux-2.6.4-win64.zip/download)
 - [Nestopia](http://nestopia.sourceforge.net/), version [1.40](http://prdownloads.sourceforge.net/nestopia/Nestopia140bin.zip?download)
 - [Nestopia UE](http://0ldsk00l.ca/nestopia/), versions:
   * [1.50](https://sourceforge.net/projects/nestopiaue/files/1.50/nestopia_1.50-win32.zip/download)
