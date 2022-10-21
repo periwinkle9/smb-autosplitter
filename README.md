@@ -29,10 +29,10 @@ Currently, the following emulators are supported:
 
 Other versions of the above emulators probably will not work.
 
-Bizhawk is currently not supported—contact me or submit a pull request if you know the memory addresses for Bizhawk!
+Bizhawk is currently not supported.
 
 ## Supported Speedrun Categories
-The autosplitter *should* fully work in most categories that start in 1-1 and end by touching an axe in a world numbered 8 or higher.
+The autosplitter *should* fully work in most categories that start from the title screen and end by touching an axe in a world numbered 8 or higher.
 These include:
 - Any%
 - Warpless
@@ -47,14 +47,13 @@ These include:
 Additionally, these categories *may* partially work:
 - Beat 5-4: The final split will have to be hit manually
 - Minus World (NES/FC): The final split will have to be hit manually
-- SMB2J: Some splits may be incorrect for the following categories (due to the autosplitter assuming that you start in World 1):
-  * A-D Any%
-  * A-D Warpless.
+- SMB2J A-D categories: Untested, but should at least partially work although the final split may have to be hit manually
 
 Other categories will not be properly supported:
 - Both Quests: The timer will not split during second quest
 - 8-4 IL
 - Category extensions that don't complete the game, such as 1-1 as Fire Mario, Softlock, 10 Walljumps, etc.
+- Other categories that start in the middle of a level or otherwise not from pressing start on the title screen.
 
 ## Usage Instructions
 0. Make sure you do not have any autosplitters activated under the "Edit Splits" window (they may conflict with this one).
@@ -69,8 +68,7 @@ You will still have to set up split names, other layout settings, etc. yourself.
 
 - Title screen delays (i.e. starting the timer on reset/game select) are currently not supported. Start the timer manually if you are using a start delay.
 - The autosplitter does not split perfectly (expect a variance of up to ~3 frames or so). As such, LiveSplit's sum of best calculation will be inaccurate even if all of your splits were done by this autosplitter. This one is on LiveSplit, not on me.
-- If the timer is not running, the autosplitter will start it when entering or exiting a sub-area in 1-1.
 - Both Quests: Splitting during second quest is currently not supported.
 - Issues with SMB2J:
   * Load times (e.g. between 4-4 and 5-1) are not removed.
-  * Categories that go beyond World 8 are not officially supported at this time (but may mostly work anyways. Use at your own discretion)
+  * Categories that go beyond World 8 are not officially supported at this time.

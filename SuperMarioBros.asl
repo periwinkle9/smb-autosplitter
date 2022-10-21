@@ -329,6 +329,7 @@ init
 	refreshRate = 60;
 	vars.currentWorld = 0;
 	vars.currentLevel = 0;
+	vars.gameStarting = false;
 	
 	Action<byte, byte> update = (world, level) =>
 		{
@@ -347,9 +348,16 @@ startup
 
 start
 {
+	// Detect game start and set starting world/level accordingly
+	if (current.operMode == 1 && old.operMode == 0)
+	{
+		vars.currentWorld = current.worldNum;
+		vars.currentLevel = current.levelNum;
+		vars.gameStarting = true;
+		print(String.Format("Game started: Current level is {0}-{1}", vars.currentWorld+1, vars.currentLevel+1));
+	}
 	// Hopefully this is a good enough set of conditions for most people
-	if (current.worldNum == 0 && current.levelNum == 0 &&
-		current.gameEngineSub == 8 && old.gameEngineSub < 8 &&
+	if (vars.gameStarting && current.gameEngineSub == 8 && old.gameEngineSub < 8 &&
 		current.operMode == 1 && current.operModeTask >= 3)
 	{
 		// If you know where to go to see this message, you deserve a kosmicZ
@@ -409,10 +417,12 @@ split
 update
 {
 	if (version == "") return false;
-	
-	if (timer.CurrentPhase == TimerPhase.NotRunning)
-	{
-		vars.currentWorld = 0;
-		vars.currentLevel = 0;
-	}
+}
+
+onReset
+{
+	vars.currentWorld = 0;
+	vars.currentLevel = 0;
+	vars.gameStarting = false;
+	print("Resetting...");
 }
