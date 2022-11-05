@@ -394,7 +394,10 @@ split
 			else
 			{
 				// Split (approximately) at black screen
-				shouldSplit = (current.screenTimer == 7 && old.screenTimer == 0);
+				// (Check for black screen timer >= 6 instead of == 7, in case the level
+				// is finished with R00 and LiveSplit doesn't catch the one frame that
+				// the timer is 7)
+				shouldSplit = (current.screenTimer >= 6 && old.screenTimer == 0);
 			}
 		}
 	}
