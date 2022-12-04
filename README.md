@@ -56,7 +56,11 @@ Other categories will not be properly supported:
 - Other categories that start in the middle of a level or otherwise not from pressing start on the title screen.
 
 ## Usage Instructions
-0. Make sure you do not have any autosplitters activated under the "Edit Splits" window (they may conflict with this one).
+**This autosplitter can now be activated from within LiveSplit. Go to "Edit Splits", make sure the game name is set to "Super Mario Bros.", and click "Activate".**
+
+Alternatively, you can download the autosplitter manually and activate it as follows:
+
+0. Make sure you do not have any autosplitters activated under the "Edit Splits" window (you will get double splits otherwise).
 1. Download the "[SuperMarioBros.asl](https://github.com/periwinkle9/smb-autosplitter/raw/master/SuperMarioBros.asl)" file and place it somewhere safe on your computer.
 2. Right-click LiveSplit, choose "Edit Layout...", and add a "Scriptable Auto Splitter" component (under "Control").
 3. Go to Layout Settings, click on the "Scriptable Auto Splitter" tab, click "Browse..." and select the file that you saved in Step 1.
