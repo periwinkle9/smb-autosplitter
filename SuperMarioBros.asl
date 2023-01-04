@@ -127,7 +127,8 @@ state("nestopia", "1.51")
 	byte operModeTask  : "nestopia.exe", 0x1798EC, 0, 0x7E2;
 }
 
-state("nestopia", "1.51.1")
+// Nestopia UE 1.51.1 and 1.52.0 have the same base RAM address
+state("nestopia", "1.51.1/1.52.0")
 {
 	// base 0x0000 address of ROM: "nestopia.exe", 0x17A8EC, 0, 0x70
 	byte screenTimer   : "nestopia.exe", 0x17A8EC, 0, 0x810;
@@ -185,13 +186,11 @@ init
 	
 	// Unfortunately for us, some FCEUX versions have the same ModuleMemorySize
 	// So we need a better way to distinguish between them
-	byte[] hash;
-	using (var m = System.Security.Cryptography.SHA1.Create())
-	{
-		using (var s = File.Open(modules.First().FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-			hash = m.ComputeHash(s);
-	}
-	var hashStr = hash.Select(x => x.ToString("X2")).Aggregate((a,b) => a+b);
+	print("File name: " + modules.First().FileName);
+	string hashStr;
+	using (var sha1 = System.Security.Cryptography.SHA1.Create())
+		using (var fs = File.OpenRead(modules.First().FileName))
+			hashStr = string.Concat(sha1.ComputeHash(fs).Select(b => b.ToString("X2")));
 	print("SHA1 hash: " + hashStr);
 	
 	if (game.ProcessName == "nestopia")
@@ -220,7 +219,11 @@ init
 				break;
 			case 1970176: // Nestopia UE v1.51.1
 				print("Detected Nestopia UE v1.51.1");
-				version = "1.51.1";
+				version = "1.51.1/1.52.0";
+				break;
+			case 1974272: // Nestopia UE v1.52.0
+				print("Detected Nestopia UE v1.52.0");
+				version = "1.51.1/1.52.0";
 				break;
 			default:
 				print("Unrecognized Nestopia version! (ModuleMemorySize = " + memSize + ")");

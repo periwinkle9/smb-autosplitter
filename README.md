@@ -22,6 +22,7 @@ Currently, the following emulators are supported:
   * [1.50](https://sourceforge.net/projects/nestopiaue/files/1.50/nestopia_1.50-win32.zip/download)
   * [1.51.0](https://sourceforge.net/projects/nestopiaue/files/1.51/nestopia_1.51.0-win32.zip/download)
   * [1.51.1](https://sourceforge.net/projects/nestopiaue/files/1.51/nestopia_1.51.1-win32.zip/download)
+  * [1.52.0](https://sourceforge.net/projects/nestopiaue/files/1.52/nestopia_1.52.0-win32.zip/download)
 - [Mesen](https://github.com/threecreepio/mesenrta) (threecreepio's RTA fork), versions:
   * [0.0.4](https://github.com/threecreepio/mesenrta/releases/tag/0.0.4)
   * [0.0.5](https://github.com/threecreepio/mesenrta/releases/tag/0.0.5)
