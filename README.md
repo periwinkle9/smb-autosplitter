@@ -2,35 +2,9 @@
 LiveSplit autosplitter for NES/FDS Super Mario Bros. (with partial support for FDS Super Mario Bros. 2, a.k.a. "SMB2J").
 
 ## Supported Emulators
-Currently, the following emulators are supported:
-- [FCEUX](https://fceux.com/web/home.html) (Win32 binaries), versions:
-  * [2.2.3](https://sourceforge.net/projects/fceultra/files/Binaries/2.2.3/fceux-2.2.3-win32.zip/download)
-  * [2.3.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.3.0/fceux-2.3.0-win32.zip/download)
-  * [2.4.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.4.0/fceux-2.4.0-win32.zip/download)
-  * [2.5.0](https://sourceforge.net/projects/fceultra/files/Binaries/2.5.0/fceux-2.5.0-win32.zip/download)
-  * [2.6.1](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.1/fceux-2.6.1-win32.zip/download)
-  * [2.6.2](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.2/fceux-2.6.2-win32.zip/download)
-  * [2.6.3](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.3/fceux-2.6.3-win32.zip/download)
-  * [2.6.4](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.4/fceux-2.6.4-win32.zip/download)
-- FCEUX (Qt/SDL binaries), versions:
-  * [2.6.1](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.1/qfceux-2.6.1-win64.zip/download)
-  * [2.6.2](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.2/qfceux-2.6.2-win64.zip/download)
-  * [2.6.3](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.3/qfceux-2.6.3-win64.zip/download)
-  * [2.6.4](https://sourceforge.net/projects/fceultra/files/Binaries/2.6.4/qfceux-2.6.4-win64.zip/download)
-- [Nestopia](http://nestopia.sourceforge.net/), version [1.40](http://prdownloads.sourceforge.net/nestopia/Nestopia140bin.zip?download)
-- [Nestopia UE](http://0ldsk00l.ca/nestopia/), versions:
-  * [1.50](https://sourceforge.net/projects/nestopiaue/files/1.50/nestopia_1.50-win32.zip/download)
-  * [1.51.0](https://sourceforge.net/projects/nestopiaue/files/1.51/nestopia_1.51.0-win32.zip/download)
-  * [1.51.1](https://sourceforge.net/projects/nestopiaue/files/1.51/nestopia_1.51.1-win32.zip/download)
-  * [1.52.0](https://sourceforge.net/projects/nestopiaue/files/1.52/nestopia_1.52.0-win32.zip/download)
-- [Mesen](https://github.com/threecreepio/mesenrta) (threecreepio's RTA fork), versions:
-  * [0.0.4](https://github.com/threecreepio/mesenrta/releases/tag/0.0.4)
-  * [0.0.5](https://github.com/threecreepio/mesenrta/releases/tag/0.0.5)
-  * [0.0.6](https://github.com/threecreepio/mesenrta/releases/tag/0.0.6).
+See the [Supported Emulators](https://github.com/periwinkle9/smb-autosplitter/wiki/Supported-Emulators) wiki page for the current list of supported emulators.
 
-Other versions of the above emulators probably will not work.
-
-Bizhawk is currently not supported.
+Due to technical challenges, Bizhawk is currently not supported. Support for Bizhawk is unlikely to come in the foreseeable future.
 
 ## Supported Speedrun Categories
 The autosplitter *should* fully work in most categories that start from the title screen and end by touching an axe in a world numbered 8 or higher.
@@ -62,7 +36,7 @@ Other categories will not be properly supported:
 Alternatively, you can download the autosplitter manually and activate it as follows:
 
 0. Make sure you do not have any autosplitters activated under the "Edit Splits" window (you will get double splits otherwise).
-1. Download the "[SuperMarioBros.asl](https://github.com/periwinkle9/smb-autosplitter/raw/master/SuperMarioBros.asl)" file and place it somewhere safe on your computer.
+1. Download the "[SuperMarioBros.asl](https://github.com/periwinkle9/smb-autosplitter/raw/main/SuperMarioBros.asl)" file and place it somewhere safe on your computer.
 2. Right-click LiveSplit, choose "Edit Layout...", and add a "Scriptable Auto Splitter" component (under "Control").
 3. Go to Layout Settings, click on the "Scriptable Auto Splitter" tab, click "Browse..." and select the file that you saved in Step 1.
 
@@ -73,6 +47,7 @@ You will still have to set up split names, other layout settings, etc. yourself.
 
 - Title screen delays (i.e. starting the timer on reset/game select) are currently not supported. Start the timer manually if you are using a start delay.
 - The autosplitter does not split perfectly (expect a variance of up to ~3 frames or so). As such, LiveSplit's sum of best calculation will be inaccurate even if all of your splits were done by this autosplitter. This one is on LiveSplit, not on me.
+- The autosplitter will not work if the file path to the emulator contains non-UTF-8 characters (such as Chinese characters). This is due to a LiveSplit bug and is expected to be fixed in a future release.
 - Both Quests: Splitting during second quest is currently not supported.
 - Issues with SMB2J:
   * Load times (e.g. between 4-4 and 5-1) are not removed.
