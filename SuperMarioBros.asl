@@ -52,6 +52,26 @@ state("fceux", "2.6.1/2")
 	byte operModeTask  : 0x3DA4DC, 0x772;
 }
 
+state("fceux", "2.6.5")
+{
+	byte screenTimer   : 0x4378A4, 0x7A0;
+	byte worldNum      : 0x4378A4, 0x75F;
+	byte levelNum      : 0x4378A4, 0x75C;
+	byte gameEngineSub : 0x4378A4, 0xE;
+	byte operMode      : 0x4378A4, 0x770;
+	byte operModeTask  : 0x4378A4, 0x772;
+}
+
+state("fceux64", "2.6.5")
+{
+	byte screenTimer   : 0x4D5150, 0x7A0;
+	byte worldNum      : 0x4D5150, 0x75F;
+	byte levelNum      : 0x4D5150, 0x75C;
+	byte gameEngineSub : 0x4D5150, 0xE;
+	byte operMode      : 0x4D5150, 0x770;
+	byte operModeTask  : 0x4D5150, 0x772;
+}
+
 state("qfceux", "2.6.1")
 {
 	byte screenTimer   : 0x30DD70, 0x7A0;
@@ -90,6 +110,16 @@ state("qfceux", "2.6.4")
 	byte gameEngineSub : 0x318340, 0xE;
 	byte operMode      : 0x318340, 0x770;
 	byte operModeTask  : 0x318340, 0x772;
+}
+
+state("qfceux", "2.6.5")
+{
+	byte screenTimer   : 0x32E718, 0x7A0;
+	byte worldNum      : 0x32E718, 0x75F;
+	byte levelNum      : 0x32E718, 0x75C;
+	byte gameEngineSub : 0x32E718, 0xE;
+	byte operMode      : 0x32E718, 0x770;
+	byte operModeTask  : 0x32E718, 0x772;
 }
 
 state("nestopia", "1.40")
@@ -191,7 +221,7 @@ init
 	using (var sha1 = System.Security.Cryptography.SHA1.Create())
 		using (var fs = File.OpenRead(modules.First().FileName))
 			hashStr = string.Concat(sha1.ComputeHash(fs).Select(b => b.ToString("X2")));
-	print("SHA1 hash: " + hashStr);
+	print(String.Format("Module memory size: {0}\tSHA1 hash: {1}", memSize, hashStr));
 	
 	if (game.ProcessName == "nestopia")
 	{
@@ -226,7 +256,7 @@ init
 				version = "1.51.1/1.52.0";
 				break;
 			default:
-				print("Unrecognized Nestopia version! (ModuleMemorySize = " + memSize + ")");
+				print("Unrecognized Nestopia version!");
 				version = "";
 				break;
 		}
@@ -268,8 +298,26 @@ init
 				else
 					goto default;
 				break;
+			case 6434816:
+				print("Detected FCEUX 2.6.5");
+				version = "2.6.5";
+				break;
 			default:
-				print("Unrecognized FCEUX version! (ModuleMemorySize = " + memSize + ")");
+				print("Unrecognized FCEUX version!");
+				version = "";
+				break;
+		}
+	}
+	else if (game.ProcessName == "fceux64")
+	{
+		switch (memSize)
+		{
+			case 8069120:
+				print("Detected FCEUX64 2.6.5");
+				version = "2.6.5";
+				break;
+			default:
+				print("Unrecognized FCEUX64 version!");
 				version = "";
 				break;
 		}
@@ -300,8 +348,12 @@ init
 				else
 					goto default;
 				break;
+			case 16216064:
+				print("Detected FCEUX (Qt/SDL) 2.6.5");
+				version = "2.6.5";
+				break;
 			default:
-				print("Unrecognized qFCEUX version! (ModuleMemorySize = " + memSize + ")");
+				print("Unrecognized qFCEUX version!");
 				version = "";
 				break;
 		}
@@ -323,7 +375,7 @@ init
 				version = "0.0.6";
 				break;
 			default:
-				print("Unrecognized Mesen version! (ModuleMemorySize = " + memSize + ")");
+				print("Unrecognized Mesen version!");
 				version = "";
 				break;
 		}
