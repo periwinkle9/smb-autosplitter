@@ -47,7 +47,6 @@ You will still have to set up split names, other layout settings, etc. yourself.
 
 - Title screen delays (i.e. starting the timer on reset/game select) are currently not supported. Start the timer manually if you are using a start delay.
 - The autosplitter does not split perfectly (expect a variance of up to ~3 frames or so). As such, LiveSplit's sum of best calculation will be inaccurate even if all of your splits were done by this autosplitter. This one is on LiveSplit, not on me.
-- The autosplitter will not work if the file path to the emulator contains non-UTF-8 characters (such as Chinese characters). This is due to a LiveSplit bug and is expected to be fixed in a future release.
 - Both Quests: Splitting during second quest is currently not supported.
 - Issues with SMB2J:
   * Load times (e.g. between 4-4 and 5-1) are not removed.
