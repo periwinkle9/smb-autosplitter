@@ -35,8 +35,8 @@ state("nestopia", "1.51")
 	byte operModeTask  : "nestopia.exe", 0x1798EC, 0, 0x7E2;
 }
 
-// Nestopia UE 1.51.1 and 1.52.0 have the same base RAM address
-state("nestopia", "1.51.1/1.52.0")
+// Nestopia UE 1.51.1, 1.52.0, and 1.52.1 have the same base RAM address
+state("nestopia", "1.51.1/1.52.x")
 {
 	// base 0x0000 address of ROM: "nestopia.exe", 0x17A8EC, 0, 0x70
 	byte screenTimer   : "nestopia.exe", 0x17A8EC, 0, 0x810;
@@ -118,11 +118,15 @@ init
 				break;
 			case 1970176: // Nestopia UE v1.51.1
 				print("Detected Nestopia UE v1.51.1");
-				version = "1.51.1/1.52.0";
+				version = "1.51.1/1.52.x";
 				break;
 			case 1974272: // Nestopia UE v1.52.0
 				print("Detected Nestopia UE v1.52.0");
-				version = "1.51.1/1.52.0";
+				version = "1.51.1/1.52.x";
+				break;
+			case 1957888: // Nestopia UE v1.52.1
+				print("Detected Nestopia UE v1.52.1");
+				version = "1.51.1/1.52.x";
 				break;
 			default:
 				print("Unrecognized Nestopia version!");
