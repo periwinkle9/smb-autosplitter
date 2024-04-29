@@ -1,0 +1,36 @@
+>>> Nestopia UE offsets
+(TODO)
+
+>>> MesenRTA 0.0.7 offets
+
+Emulation logic is handled by MesenCore.dll
+InteropDLL/ConsoleWrapper.cpp: shared_ptr<Console> _console @ 0x1842F99D0
+	(should be able to spot easily by analyzing InitDll())
+Core/Console.h: Console::_memoryManager @ offset 0xB8
+	class Console: public std::enable_shared_from_this<Console>
+	{
+		// base class: sizeof = 16
+		SimpleLock _runLock; // offset 16 (sizeof = 12)
+		SimpleLock _stopLock; // offset 28
+		SimpleLock _debuggerLock; // offset 40
+		atomic<uint32_t> _pauseCounter; // offset 52 (sizeof = 4)
+		shared_ptr<RewindManager> _rewindManager; // offset 56 (sizeof = 16)
+		shared_ptr<HistoryViewer> _historyViewer; // offset 72
+		shared_ptr<CPU> _cpu; // offset 88
+		shared_ptr<PPU> _ppu; // offset 104
+		shared_ptr<APU> _apu; // offset 120
+		shared_ptr<Debugger> _debugger; // offset 136
+		shared_ptr<BaseMapper> _mapper; // offset 152
+		shared_ptr<ControlManager> _controlManager; // offset 168
+		shared_ptr<MemoryManager> _memoryManager; // offset 184 (0xB8)
+		// ...
+	};
+Core/MemoryManager.h: MemoryManager::_internalRAM @ offset 0x58
+	class MemoryManager: public Snapshotable
+	{
+		// base class: sizeof = 56 (Core/Snapshotable.h)
+		shared_ptr<Console> _console; // offset 56 (sizeof = 16)
+		shared_ptr<BaseMapper> _mapper; // offset 72
+		uint8_t* _internalRAM; // offset 88 (0x58)
+		// ...
+	};
