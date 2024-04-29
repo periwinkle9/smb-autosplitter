@@ -47,17 +47,6 @@ state("nestopia", "1.51.1/1.52.x")
 	byte operModeTask  : "nestopia.exe", 0x17A8EC, 0, 0x7E2;
 }
 
-state("Mesen", "0.0.4")
-{
-	// base 0x0000 address of ROM: "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0
-	byte screenTimer   : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x7A0;
-	byte worldNum      : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x75F;
-	byte levelNum      : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x75C;
-	byte gameEngineSub : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0xE;
-	byte operMode      : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x770;
-	byte operModeTask  : "MesenCore.dll", 0x42F89E0, 0xB8, 0x58, 0x772;
-}
-
 state("Mesen", "0.0.5")
 {
 	// base 0x0000 address of ROM: "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0
@@ -80,6 +69,17 @@ state("Mesen", "0.0.6")
 	byte operModeTask  : "MesenCore.dll", 0x42FA9C0, 0xB8, 0x58, 0x772;
 }
 
+state("Mesen", "0.0.7")
+{
+	// base 0x0000 address of ROM: "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0
+	byte screenTimer   : "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0x7A0;
+	byte worldNum      : "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0x75F;
+	byte levelNum      : "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0x75C;
+	byte gameEngineSub : "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0xE;
+	byte operMode      : "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0x770;
+	byte operModeTask  : "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0x772;
+}
+
 init
 {
 	// modules.First() sometimes points to ntdll.dll instead of the actual game's executable.
@@ -89,15 +89,14 @@ init
 		print("THE THING HAPPENED!!! kosmicMad (retrying init)");
 		throw new Exception("init - module not found");
 	}
-	
-	int memSize = modules.First().ModuleMemorySize;
-	
+
 	if (game.ProcessName == "nestopia")
 	{
+		int memSize = modules.First().ModuleMemorySize;
 		// Extra check for the product version in the case of v1.40 because why not
 		// (Unfortunately, the product version in the v1.50 UE executable is just "x.xx").
 		string prodVersion = modules.First().FileVersionInfo.ProductVersion;
-		
+
 		switch (memSize)
 		{
 			case 2113536: // Nestopia v1.40
@@ -136,32 +135,51 @@ init
 	}
 	else if (game.ProcessName == "Mesen")
 	{
-		switch (memSize)
+		var coreDLL = Array.Find(modules, x => x.ModuleName == "MesenCore.dll");
+		if (coreDLL == null)
 		{
-			case 5226496:
+			// This shouldn't happen...?
+			print("MesenCore.dll isn't loaded?");
+			throw new Exception("Couldn't find MesenCore.dll");
+		}
+
+		string hashStr;
+		using (var sha1 = System.Security.Cryptography.SHA1.Create())
+			using (var fs = File.OpenRead(coreDLL.FileName))
+				hashStr = string.Concat(sha1.ComputeHash(fs).Select(b => b.ToString("X2")));
+
+		switch (hashStr)
+		{
+			case "14FA1BA7082D7D7E01A38FF6E2EF60E478CAAD57":
 				print("Detected Mesen 0.0.4");
-				version = "0.0.4";
+				// I don't know why I thought the addresses were different before,
+				// but 0.0.4 and 0.0.5 have the same addresses
+				version = "0.0.5";
 				break;
-			case 5300224:
+			case "CCD133A1ABBC7FF28131C8BC7AC4F5E25BE99EE8":
 				print("Detected Mesen 0.0.5");
 				version = "0.0.5";
 				break;
-			case 5283840:
+			case "75854D0F3D474B96F3DD29C693EAEFDB733DB83F":
 				print("Detected Mesen 0.0.6");
 				version = "0.0.6";
 				break;
+			case "12BFF659191984F011E0F4FC5AC2900C929D5991":
+				print("Detected Mesen 0.0.7");
+				version = "0.0.7";
+				break;
 			default:
-				print("Unrecognized Mesen version!");
+				print("Unrecognized Mesen version! SHA1 = " + hashStr);
 				version = "";
 				break;
 		}
 	}
-	
+
 	refreshRate = 60;
 	vars.currentWorld = 0;
 	vars.currentLevel = 0;
 	vars.gameStarting = false;
-	
+
 	Action<byte, byte> update = (world, level) =>
 		{
 			print(String.Format("Completed {0}-{1}", vars.currentWorld+1, vars.currentLevel+1));
@@ -200,14 +218,14 @@ start
 split
 {
 	bool shouldSplit = false;
-	
+
 	// Check for next level
 	if (current.worldNum > vars.currentWorld || current.levelNum > vars.currentLevel)
 	{
 		// I *think* this should technically work in all cases...?
 		bool levelStarted = (current.gameEngineSub == 7 || current.gameEngineSub == 8) &&
 			old.gameEngineSub < current.gameEngineSub;
-		
+
 		// Check split setting
 		if (settings["SplitLevelStart"]) // Split at next level start
 		{
@@ -241,10 +259,10 @@ split
 			return true;
 		}
 	}
-	
+
 	if (shouldSplit)
 		vars.updateProgress(current.worldNum, current.levelNum);
-	
+
 	return shouldSplit;
 }
 
