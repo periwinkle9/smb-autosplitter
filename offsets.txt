@@ -1,5 +1,57 @@
 >>> Nestopia UE offsets
-(TODO)
+source/win32/NstMain.cpp: return Nestopia::Application::Main(cmdShow).Run();
+	(Look for one of the static variables that gets assigned the this pointer in the constructor)
+source/win32/NstApplicationMain.hpp: Nestopia::Application::Main::emulator @ offset 0
+	class Main
+	{
+		Managers::Emulator emulator;
+		// ...
+	};
+source/win32/NstManagerEmulator.hpp: base class Nes::Emulator
+	class Emulator : public Nes::Emulator // Actually Nes::Api::Emulator
+	{
+		// ...
+	};
+source/core/api/NstApiEmulator.hpp: Nes::Api::Emulator::machine @ offset 0
+	class Emulator
+	{
+		Core::Machine& machine;
+		// ...
+	};
+source/core/NstMachine.hpp: Nes::Core::Machine::cpu @ offset 8
+	class Machine
+	{
+		uint state; // offset 0
+		dword frame; // offset 4
+		Cpu cpu; // offset 8
+		// ...
+	};
+source/core/NstCpu.hpp: Nes::Core::Cpu::ram @ offset 0x68 (0x70 from Nes::Core::Machine)
+	class Cpu
+	{
+		uint pc; // offset 0
+		Cycles cycles; // offset 4 (sizeof = 24)
+		uint a; // offset 28
+		uint x; // offset 32
+		uint y; // offset 36
+		uint sp; // offset 40
+		Flags flags; // offset 44 (sizeof = 20)
+		Interrupt interrupt; // offset 64 (sizeof = 12)
+		Hooks hooks; // offset 76 (sizeof = 8)
+		uint opcode; // offset 84
+		word jammed; // offset 88
+		word model; // offset 90
+		Linker linker; // offset 92 (sizeof = 4)
+		qaword ticks; // offset 96
+		Ram ram; // offset 104 (0x68)
+		// ...
+	};
+source/core/NstCpu.hpp: Nes::Core::Ram::mem @ offset 0 (0x70 from Nes::Core::Machine)
+	struct Ram
+	{
+		byte mem[RAM_SIZE]; // offset 0
+		// ...
+	};
 
 >>> MesenRTA 0.0.7 offets
 
