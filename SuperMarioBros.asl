@@ -208,8 +208,9 @@ init
 startup
 {
 	settings.Add("SplitLevelStart", false, "Split at level start instead of black screen");
-	settings.Add("Split4-2Only", false, "Split for 4-2 only (manual splitting except pl8-1)");
-	settings.Add("SplitAxe", false, "Also split at 8-4 axe", "Split4-2Only");
+	settings.Add("SplitOnlySomeLevels", false, "Only split for specific levels (select below)");
+	settings.Add("Split4-2", false, "4-2 (warp to 8-1)", "SplitOnlySomeLevels");
+	settings.Add("SplitAxe", false, "8-4", "SplitOnlySomeLevels");
 }
 
 start
@@ -273,13 +274,13 @@ split
 		if (current.worldNum >= 7 && current.operMode == 2 && old.operMode != 2)
 		{
 			print("GG");
-			return !settings["Split4-2Only"] || settings["SplitAxe"];
+			return !settings["SplitOnlySomeLevels"] || settings["SplitAxe"];
 		}
 	}
 
 	if (shouldSplit)
 	{
-		shouldSplit = !settings["Split4-2Only"] || (current.worldNum == 7 && vars.currentWorld == 3);
+		shouldSplit = !settings["SplitOnlySomeLevels"] || (settings["Split4-2"] && current.worldNum == 7 && vars.currentWorld == 3);
 		vars.updateProgress(current.worldNum, current.levelNum);
 	}
 
