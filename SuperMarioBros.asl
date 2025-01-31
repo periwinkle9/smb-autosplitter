@@ -190,7 +190,6 @@ init
 		}
 	}
 
-	refreshRate = 60;
 	vars.currentWorld = 0;
 	vars.currentLevel = 0;
 	vars.gameStarting = false;
