@@ -193,10 +193,13 @@ init
 	vars.currentWorld = 0;
 	vars.currentLevel = 0;
 	vars.gameStarting = false;
+	vars.levelCompletedTime = new TimeSpan(0);
+	vars.isDelaySplitting = false;
 
 	Action<byte, byte> update = (world, level) =>
 		{
-			print(String.Format("Completed {0}-{1}", vars.currentWorld+1, vars.currentLevel+1));
+			vars.levelCompletedTime = timer.CurrentTime.RealTime;
+			print(String.Format("Completed {0}-{1} at {2}", vars.currentWorld+1, vars.currentLevel+1, vars.levelCompletedTime));
 			print(String.Format("Now playing World {0}-{1}", world+1, level+1));
 			vars.currentWorld = world;
 			vars.currentLevel = level;
@@ -207,6 +210,7 @@ init
 startup
 {
 	settings.Add("SplitLevelStart", false, "Split at level start instead of black screen");
+	settings.Add("DelaySplit", false, "Delay intermediate splits by 0.1s to simulate human reaction time");
 	settings.Add("SplitOnlySomeLevels", false, "Only split for specific levels (select below)");
 	settings.Add("Split4-2", false, "4-2 (warp to 8-1)", "SplitOnlySomeLevels");
 	settings.Add("SplitAxe", false, "8-4", "SplitOnlySomeLevels");
@@ -220,6 +224,7 @@ start
 		vars.currentWorld = current.worldNum;
 		vars.currentLevel = current.levelNum;
 		vars.gameStarting = true;
+		vars.isDelaySplitting = false;
 		print(String.Format("Game started: Current level is {0}-{1}", vars.currentWorld+1, vars.currentLevel+1));
 	}
 	// Hopefully this is a good enough set of conditions for most people
@@ -234,6 +239,16 @@ start
 
 split
 {
+	if (vars.isDelaySplitting)
+	{
+		if (timer.CurrentTime.RealTime - vars.levelCompletedTime > TimeSpan.FromMilliseconds(100))
+		{
+			vars.isDelaySplitting = false;
+			return true;
+		}
+		else
+			return false;
+	}
 	bool shouldSplit = false;
 
 	// Check for next level
@@ -281,6 +296,11 @@ split
 	{
 		shouldSplit = !settings["SplitOnlySomeLevels"] || (settings["Split4-2"] && current.worldNum == 7 && vars.currentWorld == 3);
 		vars.updateProgress(current.worldNum, current.levelNum);
+		if (shouldSplit && settings["DelaySplit"])
+		{
+			vars.isDelaySplitting = true;
+			shouldSplit = false; // Don't split now
+		}
 	}
 
 	return shouldSplit;
