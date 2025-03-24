@@ -47,7 +47,7 @@ state("nestopia", "1.51.1/1.52.x")
 	byte operModeTask  : "nestopia.exe", 0x17A8EC, 0, 0x7E2;
 }
 
-state("nestopia", "1.53.0")
+state("nestopia", "1.53.x")
 {
 	// base 0x0000 address of ROM: "nestopia.exe", 0x17B8EC, 0, 0x70
 	byte screenTimer   : "nestopia.exe", 0x17B8EC, 0, 0x810;
@@ -138,9 +138,9 @@ init
 				print("Detected Nestopia UE v1.52.1");
 				version = "1.51.1/1.52.x";
 				break;
-			case 1961984: // Nestopia UE v1.53.0
-				print("Detected Nestopia UI v1.53.0");
-				version = "1.53.0";
+			case 1961984: // Nestopia UE v1.53.x
+				print("Detected Nestopia UE v1.53.x");
+				version = "1.53.x";
 				break;
 			default:
 				print("Unrecognized Nestopia version! memSize = " + memSize);
