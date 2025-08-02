@@ -53,6 +53,52 @@ source/core/NstCpu.hpp: Nes::Core::Ram::mem @ offset 0 (0x70 from Nes::Core::Mac
 		// ...
 	};
 
+>>> NestopiaRTA 1.53.11 offsets
+Same as Nestopia UE, except:
+source/core/NstCpu.hpp: Nes::Core::Cpu::ram @ offset 0x70 (0x78 from Nes::Core::Machine)
+	class Cpu
+	{
+		uint sessionID; // offset 0
+		bool isClean; // offset 4
+		uint pc; // offset 8
+		Cycles cycles; // offset 12 (sizeof = 24)
+		uint a; // offset 36
+		uint x; // offset 40
+		uint y; // offset 44
+		uint sp; // offset 48
+		Flags flags; // offset 52 (sizeof = 20)
+		Interrupt interrupt; // offset 72 (sizeof = 12)
+		Hooks hooks; // offset 84 (sizeof = 8)
+		uint opcode; // offset 92
+		word jammed; // offset 96
+		word model; // offset 98
+		Linker linker; // offset 100 (sizeof = 4)
+		qaword ticks; // offset 104
+		Ram ram; // offset 112 (0x70)
+		// ...
+	};
+source/core/NstCpu.hpp: Nes::Core::Ram::mem @ offset 0 (0x78 from Nes::Core::Machine)
+	struct Ram
+	{
+		byte mem[RAM_SIZE]; // offset 0
+		// ...
+	};
+
+>>> NestopiaRTA 1.53.12 offsets
+Same as NestopiaRTA 1.53.11, except:
+source/core/NstMachine.hpp: Nes::Core::Machine::cpu @ offset 24
+	class Machine
+	{
+		uint state; // offset 0
+		dword frame; // offset 4
+		double time; // offset 8
+		bool timerRunning; // offset 16
+		Cpu cpu; // offset 24
+		// ...
+	};
+source/core/NstCpu.hpp: Nes::Core::Cpu::ram @ offset 0x70 (0x88 from Nes::Core::Machine)
+source/core/NstCpu.hpp: Nes::Core::Ram::mem @ offset 0 (0x88 from Nes::Core::Machine)
+
 >>> MesenRTA 0.0.7 offets
 
 Emulation logic is handled by MesenCore.dll
