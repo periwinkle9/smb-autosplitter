@@ -113,6 +113,17 @@ state("Mesen", "0.0.7")
 	byte operModeTask  : "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0x772;
 }
 
+state("Mesen", "0.0.4_RTA")
+{
+	// base 0x0000 address of ROM: "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0
+	byte screenTimer   : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0x7A0;
+	byte worldNum      : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0x75F;
+	byte levelNum      : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0x75C;
+	byte gameEngineSub : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0xE;
+	byte operMode      : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0x770;
+	byte operModeTask  : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0x772;
+}
+
 init
 {
 	// modules.First() sometimes points to ntdll.dll instead of the actual game's executable.
@@ -212,6 +223,10 @@ init
 			case "12BFF659191984F011E0F4FC5AC2900C929D5991":
 				print("Detected Mesen 0.0.7");
 				version = "0.0.7";
+				break;
+			case "041D76CAD05B7875156FC43A344E88F13AADACA8":
+				print("Detected Mesen2RTA 0.0.4");
+				version = "0.0.4_RTA";
 				break;
 			default:
 				print("Unrecognized Mesen version! SHA1 = " + hashStr);

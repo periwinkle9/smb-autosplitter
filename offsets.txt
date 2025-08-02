@@ -132,3 +132,41 @@ Core/MemoryManager.h: MemoryManager::_internalRAM @ offset 0x58
 		uint8_t* _internalRAM; // offset 88 (0x58)
 		// ...
 	};
+
+>>> Mesen2RTA 0.0.4 offsets
+
+Emulation logic is handled by MesenCore.dll
+InteropDLL/EmuApiWrapper.cpp: unique_ptr<Emulator> _emu @ 0x1846CC688
+	(should be able to spot easily by analyzing InitDll())
+Core/Shared/Emulator.h: Emulator::_console @ offset 0x10
+	class Emulator
+	{
+		unique_ptr<thread> _emuThread; // offset 0 (sizeof = 8)
+		unique_ptr<AudioPlayerHud> _audioPlayerHud; // offset 8
+		safe_ptr<IConsole> _console; // offset 16 (0x10)
+		// ...
+	};
+Core/NES/NesConsole.h: NesConsole::_memoryManager @ offset 0x40
+	class NesConsole: public IConsole
+	{
+		// base class: sizeof = 16
+		Emulator* _emu; // offset 16
+		unique_ptr<NesConsole> _vsSubConsole; // offset 24 (sizeof = 8)
+		NesConsole* _vsMainConsole; // offset 32
+		unique_ptr<NesCpu> _cpu; // offset 40
+		unique_ptr<BaseNesPpu> _ppu; // offset 48
+		unique_ptr<NesApu> _apu; // offset 56
+		unique_ptr<NesMemoryManager> _memoryManager; // offset 64
+		// ...
+	};
+Core/NES/NesMemoryManager.h: NesMemoryManager::_internalRam @ offset 0x28
+	class NesMemoryManager: public ISerializable
+	{
+		// base class: sizeof = 8
+		Emulator* _emu; // offset 8
+		CheatManager* _cheatManager; // offset 16
+		NesConsole* _console; // offset 24
+		BaseMapper* _mapper; // offset 32
+		uint8_t* _internalRam; // offset 40 (0x28)
+		// ...
+	};
