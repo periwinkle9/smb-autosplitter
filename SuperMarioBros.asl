@@ -80,6 +80,17 @@ state("nestopia", "1.53.12_RTA")
 	byte operModeTask  : "nestopia.exe", 0x17D65C, 0, 0x7FA;
 }
 
+state("nestopia", "1.53.13_RTA")
+{
+	// base 0x0000 address of ROM: "nestopia.exe", 0x17E65C, 0, 0x88
+	byte screenTimer   : "nestopia.exe", 0x17E65C, 0, 0x828;
+	byte worldNum      : "nestopia.exe", 0x17E65C, 0, 0x7E7;
+	byte levelNum      : "nestopia.exe", 0x17E65C, 0, 0x7E4;
+	byte gameEngineSub : "nestopia.exe", 0x17E65C, 0, 0x96;
+	byte operMode      : "nestopia.exe", 0x17E65C, 0, 0x7F8;
+	byte operModeTask  : "nestopia.exe", 0x17E65C, 0, 0x7FA;
+}
+
 state("Mesen", "0.0.5")
 {
 	// base 0x0000 address of ROM: "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0
@@ -182,6 +193,10 @@ init
 			case 1982464: // NestopiaRTA 1.53.12
 				print("Detected NestopiaRTA 1.53.12");
 				version = "1.53.12_RTA";
+				break;
+			case 1986560: // NestopiaRTA 1.53.13
+				print("Detected NestopiaRTA 1.53.13");
+				version = "1.53.13_RTA";
 				break;
 			default:
 				print("Unrecognized Nestopia version! memSize = " + memSize);

@@ -84,7 +84,7 @@ source/core/NstCpu.hpp: Nes::Core::Ram::mem @ offset 0 (0x78 from Nes::Core::Mac
 		// ...
 	};
 
->>> NestopiaRTA 1.53.12 offsets
+>>> NestopiaRTA >= 1.53.12 offsets
 Same as NestopiaRTA 1.53.11, except:
 source/core/NstMachine.hpp: Nes::Core::Machine::cpu @ offset 24
 	class Machine
