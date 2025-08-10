@@ -47,6 +47,7 @@ state("nestopia", "1.51.1/1.52.x")
 	byte operModeTask  : "nestopia.exe", 0x17A8EC, 0, 0x7E2;
 }
 
+// Nestopia UE 1.53.0, 1.53.1, and 1.53.2 have the same base RAM address
 state("nestopia", "1.53.x")
 {
 	// base 0x0000 address of ROM: "nestopia.exe", 0x17B8EC, 0, 0x70
@@ -145,12 +146,20 @@ init
 		throw new Exception("init - module not found");
 	}
 
+	Func<string, string> computeSHA1 = (fileName) =>
+		{
+			using (var sha1 = System.Security.Cryptography.SHA1.Create())
+				using (var fs = File.OpenRead(fileName))
+					return string.Concat(sha1.ComputeHash(fs).Select(b => b.ToString("X2")));
+		};
+
 	if (game.ProcessName == "nestopia")
 	{
 		int memSize = modules.First().ModuleMemorySize;
 		// Extra check for the product version in the case of v1.40 because why not
 		// (Unfortunately, the product version in the v1.50 UE executable is just "x.xx").
 		string prodVersion = modules.First().FileVersionInfo.ProductVersion;
+		string sha1Hash = computeSHA1(modules.First().FileName);
 
 		switch (memSize)
 		{
@@ -182,13 +191,21 @@ init
 				print("Detected Nestopia UE v1.52.1");
 				version = "1.51.1/1.52.x";
 				break;
-			case 1961984: // Nestopia UE v1.53.x
-				print("Detected Nestopia UE v1.53.x");
+			case 1961984: // Nestopia UE v1.53.0/1
+				print("Detected Nestopia UE v1.53.0/1");
 				version = "1.53.x";
 				break;
-			case 1978368: // NestopiaRTA 1.53.11
-				print("Detected NestopiaRTA 1.53.11");
-				version = "1.53.11_RTA";
+			case 1978368: // Nestopia UE v1.53.2, NestopiaRTA 1.53.11
+				if (sha1Hash == "92508F85E8A6D48E20FF1D5F57D971D5BCD853D5")
+				{
+					print("Detected Nestopia UE v1.53.2");
+					version = "1.53.x";
+				}
+				else
+				{
+					print("Detected NestopiaRTA 1.53.11");
+					version = "1.53.11_RTA";
+				}
 				break;
 			case 1982464: // NestopiaRTA 1.53.12
 				print("Detected NestopiaRTA 1.53.12");
@@ -199,7 +216,7 @@ init
 				version = "1.53.13_RTA";
 				break;
 			default:
-				print("Unrecognized Nestopia version! memSize = " + memSize);
+				print(string.Format("Unrecognized Nestopia version! memSize = {0}, SHA1 = {1}", memSize, sha1Hash));
 				version = "";
 				break;
 		}
@@ -214,11 +231,7 @@ init
 			throw new Exception("Couldn't find MesenCore.dll");
 		}
 
-		string hashStr;
-		using (var sha1 = System.Security.Cryptography.SHA1.Create())
-			using (var fs = File.OpenRead(coreDLL.FileName))
-				hashStr = string.Concat(sha1.ComputeHash(fs).Select(b => b.ToString("X2")));
-
+		string hashStr = computeSHA1(coreDLL.FileName);
 		switch (hashStr)
 		{
 			case "14FA1BA7082D7D7E01A38FF6E2EF60E478CAAD57":
