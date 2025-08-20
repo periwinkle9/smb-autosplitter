@@ -92,7 +92,8 @@ state("nestopia", "1.53.13_RTA")
 	byte operModeTask  : "nestopia.exe", 0x17E65C, 0, 0x7FA;
 }
 
-state("Mesen", "0.0.5")
+// MesenRTA 0.0.4 and 0.0.5 have the same base RAM address
+state("Mesen", "0.0.4/5")
 {
 	// base 0x0000 address of ROM: "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0
 	byte screenTimer   : "MesenCore.dll", 0x42F99C0, 0xB8, 0x58, 0x7A0;
@@ -152,76 +153,8 @@ init
 				using (var fs = File.OpenRead(fileName))
 					return string.Concat(sha1.ComputeHash(fs).Select(b => b.ToString("X2")));
 		};
-
-	if (game.ProcessName == "nestopia")
-	{
-		int memSize = modules.First().ModuleMemorySize;
-		// Extra check for the product version in the case of v1.40 because why not
-		// (Unfortunately, the product version in the v1.50 UE executable is just "x.xx").
-		string prodVersion = modules.First().FileVersionInfo.ProductVersion;
-		string sha1Hash = computeSHA1(modules.First().FileName);
-
-		switch (memSize)
-		{
-			case 2113536: // Nestopia v1.40
-				if (prodVersion == "1.40")
-				{
-					print("Detected Nestopia v1.40");
-					version = "1.40";
-					break;
-				}
-				goto default;
-			case 1953792: // Nestopia UE v1.50
-				print("Detected Nestopia UE v1.50");
-				version = "1.50";
-				break;
-			case 1966080: // Nestopia UE v1.51.0
-				print("Detected Nestopia UE v1.51.0");
-				version = "1.51";
-				break;
-			case 1970176: // Nestopia UE v1.51.1
-				print("Detected Nestopia UE v1.51.1");
-				version = "1.51.1/1.52.x";
-				break;
-			case 1974272: // Nestopia UE v1.52.0
-				print("Detected Nestopia UE v1.52.0");
-				version = "1.51.1/1.52.x";
-				break;
-			case 1957888: // Nestopia UE v1.52.1
-				print("Detected Nestopia UE v1.52.1");
-				version = "1.51.1/1.52.x";
-				break;
-			case 1961984: // Nestopia UE v1.53.0/1
-				print("Detected Nestopia UE v1.53.0/1");
-				version = "1.53.x";
-				break;
-			case 1978368: // Nestopia UE v1.53.2, NestopiaRTA 1.53.11
-				if (sha1Hash == "92508F85E8A6D48E20FF1D5F57D971D5BCD853D5")
-				{
-					print("Detected Nestopia UE v1.53.2");
-					version = "1.53.x";
-				}
-				else
-				{
-					print("Detected NestopiaRTA 1.53.11");
-					version = "1.53.11_RTA";
-				}
-				break;
-			case 1982464: // NestopiaRTA 1.53.12
-				print("Detected NestopiaRTA 1.53.12");
-				version = "1.53.12_RTA";
-				break;
-			case 1986560: // NestopiaRTA 1.53.13
-				print("Detected NestopiaRTA 1.53.13");
-				version = "1.53.13_RTA";
-				break;
-			default:
-				print(string.Format("Unrecognized Nestopia version! memSize = {0}, SHA1 = {1}", memSize, sha1Hash));
-				version = "";
-				break;
-		}
-	}
-	else if (game.ProcessName == "Mesen")
+	string gameHash;
+	if (game.ProcessName == "Mesen")
 	{
 		var coreDLL = Array.Find(modules, x => x.ModuleName == "MesenCore.dll");
 		if (coreDLL == null)
@@ -231,36 +164,85 @@ init
 			throw new Exception("Couldn't find MesenCore.dll");
 		}
 
-		string hashStr = computeSHA1(coreDLL.FileName);
-		switch (hashStr)
-		{
-			case "14FA1BA7082D7D7E01A38FF6E2EF60E478CAAD57":
-				print("Detected Mesen 0.0.4");
-				// I don't know why I thought the addresses were different before,
-				// but 0.0.4 and 0.0.5 have the same addresses
-				version = "0.0.5";
-				break;
-			case "CCD133A1ABBC7FF28131C8BC7AC4F5E25BE99EE8":
-				print("Detected Mesen 0.0.5");
-				version = "0.0.5";
-				break;
-			case "75854D0F3D474B96F3DD29C693EAEFDB733DB83F":
-				print("Detected Mesen 0.0.6");
-				version = "0.0.6";
-				break;
-			case "12BFF659191984F011E0F4FC5AC2900C929D5991":
-				print("Detected Mesen 0.0.7");
-				version = "0.0.7";
-				break;
-			case "041D76CAD05B7875156FC43A344E88F13AADACA8":
-				print("Detected Mesen2RTA 0.0.4");
-				version = "0.0.4_RTA";
-				break;
-			default:
-				print("Unrecognized Mesen version! SHA1 = " + hashStr);
-				version = "";
-				break;
-		}
+		gameHash = computeSHA1(coreDLL.FileName);
+	}
+	else
+		gameHash = computeSHA1(modules.First().FileName);
+
+	switch (gameHash)
+	{
+		case "E571A428BEF389910CF3F10191B44700B8855D5F": // Nestopia v1.40
+			print("Detected Nestopia v1.40");
+			version = "1.40";
+			break;
+		case "9F18310D14D10028B4EC3AB6D7B17CDAEC508593": // Nestopia UE v1.50
+			print("Detected Nestopia UE v1.50");
+			version = "1.50";
+			break;
+		case "05CDC1D09F27095565DCCF05E5657189FE90544C": // Nestopia UE v1.51.0
+			print("Detected Nestopia UE v1.51.0");
+			version = "1.51";
+			break;
+		case "B30E234A6671289A439CBF6B7DFCB10E10B65F18": // Nestopia UE v1.51.1
+			print("Detected Nestopia UE v1.51.1");
+			version = "1.51.1/1.52.x";
+			break;
+		case "E4F9D15BA4748B0350284E9D2A1999ACD05086A5": // Nestopia UE v1.52.0
+			print("Detected Nestopia UE v1.52.0");
+			version = "1.51.1/1.52.x";
+			break;
+		case "FBEAFDD432F646E8922310B8E231F5567151A064": // Nestopia UE v1.52.1
+			print("Detected Nestopia UE v1.52.1");
+			version = "1.51.1/1.52.x";
+			break;
+		case "A03A614C2DF6A22AF26371D864CF961AC63C7AC7": // Nestopia UE v1.53.0
+			print("Detected Nestopia UE v1.53.0");
+			version = "1.53.x";
+			break;
+		case "8BA84147B6CE63D11F224AC5D5B9E1A81652AFC2": // Nestopia UE v1.53.1
+			print("Detected Nestopia UE v1.53.1");
+			version = "1.53.x";
+			break;
+		case "92508F85E8A6D48E20FF1D5F57D971D5BCD853D5": // Nestopia UE v1.53.2
+			print("Detected Nestopia UE v1.53.2");
+			version = "1.53.x";
+			break;
+		case "76202680936FAED6D079DD376BFDE767098ABD13": // NestopiaRTA v1.53.11
+			print("Detected NestopiaRTA v1.53.11");
+			version = "1.53.11_RTA";
+			break;
+		case "49E2DEF390BCC1722AD9FDBE3EF1E58615DD6A82": // NestopiaRTA v1.53.12
+			print("Detected NestopiaRTA v1.53.12");
+			version = "1.53.12_RTA";
+			break;
+		case "B167F695B1B0D47754464C5E2CFEA936F556322E": // NestopiaRTA v1.53.13
+			print("Detected NestopiaRTA v1.53.13");
+			version = "1.53.13_RTA";
+			break;
+		case "14FA1BA7082D7D7E01A38FF6E2EF60E478CAAD57": // MesenRTA v0.0.4
+			print("Detected MesenRTA v0.0.4");
+			version = "0.0.4/5";
+			break;
+		case "CCD133A1ABBC7FF28131C8BC7AC4F5E25BE99EE8": // MesenRTA v0.0.5
+			print("Detected MesenRTA v0.0.5");
+			version = "0.0.4/5";
+			break;
+		case "75854D0F3D474B96F3DD29C693EAEFDB733DB83F": // MesenRTA v0.0.6
+			print("Detected MesenRTA v0.0.6");
+			version = "0.0.6";
+			break;
+		case "12BFF659191984F011E0F4FC5AC2900C929D5991": // MesenRTA v0.0.7
+			print("Detected MesenRTA v0.0.7");
+			version = "0.0.7";
+			break;
+		case "041D76CAD05B7875156FC43A344E88F13AADACA8": // Mesen2RTA v0.0.4
+			print("Detected Mesen2RTA v0.0.4");
+			version = "0.0.4_RTA";
+			break;
+		default:
+			print("Unrecognized emulator! SHA1 = " + gameHash);
+			version = "";
+			break;
 	}
 
 	vars.currentWorld = 0;
