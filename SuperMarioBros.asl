@@ -81,7 +81,8 @@ state("nestopia", "1.53.12_RTA")
 	byte operModeTask  : "nestopia.exe", 0x17D65C, 0, 0x7FA;
 }
 
-state("nestopia", "1.53.13_RTA")
+// NestopiaRTA 1.53.13 and 1.53.14 have the same base RAM address
+state("nestopia", "1.53.13/14_RTA")
 {
 	// base 0x0000 address of ROM: "nestopia.exe", 0x17E65C, 0, 0x88
 	byte screenTimer   : "nestopia.exe", 0x17E65C, 0, 0x828;
@@ -217,7 +218,11 @@ init
 			break;
 		case "B167F695B1B0D47754464C5E2CFEA936F556322E": // NestopiaRTA v1.53.13
 			print("Detected NestopiaRTA v1.53.13");
-			version = "1.53.13_RTA";
+			version = "1.53.13/14_RTA";
+			break;
+		case "377C037F5A240E6F97F2CF89164165A4F3FB7B9A": // NestopiaRTA v1.53.14
+			print("Detected NestopiaRTA v1.53.14");
+			version = "1.53.13/14_RTA";
 			break;
 		case "14FA1BA7082D7D7E01A38FF6E2EF60E478CAAD57": // MesenRTA v0.0.4
 			print("Detected MesenRTA v0.0.4");
