@@ -235,7 +235,7 @@ init
 			print("Detected NestopiaRTA v1.53.14");
 			version = "1.53.13/14_RTA";
 			break;
-		case "E2992423FD57F640407688020A77C2820E6533E5": // NestopiaRTA v1.53.15
+		case "512AD0E5CFF4024349204E931371AD692786FC90": // NestopiaRTA v1.53.15
 			print("Detected NestopiaRTA v1.53.15");
 			version = "1.53.15_RTA";
 			break;
