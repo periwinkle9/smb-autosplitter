@@ -138,6 +138,7 @@ state("Mesen", "0.0.7")
 	byte operModeTask  : "MesenCore.dll", 0x42F99D0, 0xB8, 0x58, 0x772;
 }
 
+// Mesen2RTA
 state("Mesen", "0.0.4_RTA")
 {
 	// base 0x0000 address of ROM: "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0
@@ -147,6 +148,17 @@ state("Mesen", "0.0.4_RTA")
 	byte gameEngineSub : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0xE;
 	byte operMode      : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0x770;
 	byte operModeTask  : "MesenCore.dll", 0x46CC688, 0x10, 0x40, 0x28, 0x772;
+}
+
+state("Mesen", "0.0.5_RTA")
+{
+	// base 0x0000 address of ROM: "MesenCore.dll", 0x46D0708, 0x10, 0x40, 0x28, 0
+	byte screenTimer   : "MesenCore.dll", 0x46D0708, 0x10, 0x40, 0x28, 0x7A0;
+	byte worldNum      : "MesenCore.dll", 0x46D0708, 0x10, 0x40, 0x28, 0x75F;
+	byte levelNum      : "MesenCore.dll", 0x46D0708, 0x10, 0x40, 0x28, 0x75C;
+	byte gameEngineSub : "MesenCore.dll", 0x46D0708, 0x10, 0x40, 0x28, 0xE;
+	byte operMode      : "MesenCore.dll", 0x46D0708, 0x10, 0x40, 0x28, 0x770;
+	byte operModeTask  : "MesenCore.dll", 0x46D0708, 0x10, 0x40, 0x28, 0x772;
 }
 
 init
@@ -258,6 +270,10 @@ init
 		case "041D76CAD05B7875156FC43A344E88F13AADACA8": // Mesen2RTA v0.0.4
 			print("Detected Mesen2RTA v0.0.4");
 			version = "0.0.4_RTA";
+			break;
+		case "646F8973AFE02247E7F4A343B93BB832C4ED1A03": // Mesen2RTA v0.0.5
+			print("Detected Mesen2RTA v0.0.5");
+			version = "0.0.5_RTA";
 			break;
 		default:
 			print("Unrecognized emulator! SHA1 = " + gameHash);
