@@ -53,6 +53,41 @@ source/core/NstCpu.hpp: Nes::Core::Ram::mem @ offset 0 (0x70 from Nes::Core::Mac
 		// ...
 	};
 
+>>> Nestopia UE 1.99.0 offsets
+Same as Nestopia UE, except:
+source/core/NstMachine.hpp: Nes::Core::Machine::cpu @ offset 0x18
+	class Machine
+	{
+		uint state; // offset 0
+		dword frame; // offset 4
+		bool systemForced; // offset 8
+		Cycle strobeRise; // offset 12 (sizeof = 4)
+		bool strobeHigh; // offset 16
+		bool strobeForwarded; // offset 17
+		Cpu cpu; // offset 24 (0x18)
+		// ...
+	};
+source/core/NstCpu.hpp: Nes::Core::Cpu::ram @ offset 0x70 (0x88 from Nes::Core::Machine)
+	class Cpu
+	{
+		uint pc; // offset 0
+		Cycles cycles; // offset 4 (sizeof = 24)
+		uint a; // offset 28
+		uint x; // offset 32
+		uint y; // offset 36
+		uint sp; // offset 40
+		Flags flags; // offset 44 (sizeof = 20)
+		Interrupt interrupt; // offset 64 (sizeof = 16)
+		Hooks hooks; // offset 80 (sizeof = 8)
+		uint opcode; // offset 88
+		word jammed; // offset 92
+		word model; // offset 94
+		Linker linker; // offset 96 (sizeof = 4)
+		qaword ticks; // offset 104
+		Ram ram; // offset 112 (0x70)
+		// ...
+	};
+
 >>> NestopiaRTA 1.53.11 offsets
 Same as Nestopia UE, except:
 source/core/NstCpu.hpp: Nes::Core::Cpu::ram @ offset 0x70 (0x78 from Nes::Core::Machine)

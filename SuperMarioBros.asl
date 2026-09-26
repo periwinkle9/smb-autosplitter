@@ -59,6 +59,17 @@ state("nestopia", "1.53.x")
 	byte operModeTask  : "nestopia.exe", 0x17B8EC, 0, 0x7E2;
 }
 
+state("nestopia", "1.99.0")
+{
+	// base 0x0000 address of ROM: "nestopia.exe", 0x1A96CC, 0, 0x88
+	byte screenTimer   : "nestopia.exe", 0x1A96CC, 0, 0x828;
+	byte worldNum      : "nestopia.exe", 0x1A96CC, 0, 0x7E7;
+	byte levelNum      : "nestopia.exe", 0x1A96CC, 0, 0x7E4;
+	byte gameEngineSub : "nestopia.exe", 0x1A96CC, 0, 0x96;
+	byte operMode      : "nestopia.exe", 0x1A96CC, 0, 0x7F8;
+	byte operModeTask  : "nestopia.exe", 0x1A96CC, 0, 0x7FA;
+}
+
 state("nestopia", "1.53.11_RTA")
 {
 	// base 0x0000 address of ROM: "nestopia.exe", 0x17C62C, 0, 0x78
@@ -241,6 +252,10 @@ init
 		case "92508F85E8A6D48E20FF1D5F57D971D5BCD853D5": // Nestopia UE v1.53.2
 			print("Detected Nestopia UE v1.53.2");
 			version = "1.53.x";
+			break;
+		case "CF836437F3722A2EBFC8FDA14E0C73D9DE12E78A": // Nestopia UE v1.99.0
+			print("Detected Nestopia UE v1.99.0");
+			version = "1.99.0";
 			break;
 		case "76202680936FAED6D079DD376BFDE767098ABD13": // NestopiaRTA v1.53.11
 			print("Detected NestopiaRTA v1.53.11");
