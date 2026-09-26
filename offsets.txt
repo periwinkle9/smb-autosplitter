@@ -134,6 +134,55 @@ source/core/NstMachine.hpp: Nes::Core::Machine::cpu @ offset 24
 source/core/NstCpu.hpp: Nes::Core::Cpu::ram @ offset 0x70 (0x88 from Nes::Core::Machine)
 source/core/NstCpu.hpp: Nes::Core::Ram::mem @ offset 0 (0x88 from Nes::Core::Machine)
 
+>>> Nestopia JG 2.0.0 offsets
+jg.cpp: static Nes::Api::Emulator emulator @ 0x1403418B8
+	(thank god for debug symbols)
+src/api/NstApiEmulator.hpp: Nes::Api::Emulator::machine @ offset 0 (not a pointer, doesn't add another level of indirection)
+zz	class Emulator
+	{
+		Core::Machine& machine;
+		// ...
+	};
+src/NstMachine.hpp: Nes::Core::Machine::cpu @ offset 0x18
+	class Machine
+	{
+		uint state; // offset 0
+		dword frame; // offset 4
+		dword execFrames; // offset 8
+		bool systemForced; // offset 12
+		Cycle strobeRise; // offset 16 (sizeof = 4)
+		bool strobeHigh; // offset 20
+		bool strobeForwarded; // offset 21
+		Cpu cpu; // offset 24 (0x18)
+		// ...
+	};
+src/NstCpu.hpp: Nes::Core::Cpu::ram @ offset 0x78 (0x90 from Nes::Core::Machine)
+	class Cpu
+	{
+		uint pc; // offset 0
+		Cycles cycles; // offset 4 (sizeof = 24)
+		uint a; // offset 28
+		uint x; // offset 32
+		uint y; // offset 36
+		uint sp; // offset 40
+		Flags flags; // offset 44 (sizeof = 20)
+		Interrupt interrupt; // offset 64 (sizeof = 16)
+		Hooks hooks; // offset 80 (sizeof = 16)
+		uint opcode; // offset 96
+		word jammed; // offset 100
+		word model; // offset 102
+		Linker linker; // offset 104 (sizeof = 8)
+		qaword ticks; // offset 112
+		Ram ram; // offset 120 (0x78)
+		// ...
+	};
+src/NstCpu.hpp: Nes::Core::Ram::mem @ offset 0 (0x90 from Nes::Core::Machine)
+	struct Ram
+	{
+		byte mem[RAM_SIZE]; // offset 0
+		// ...
+	};
+
 >>> MesenRTA 0.0.7 offets
 
 Emulation logic is handled by MesenCore.dll
